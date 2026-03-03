@@ -1,0 +1,943 @@
+<!doctype html>
+<html lang="mn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Лаб 2 — Chapter 3: Requirements Determination (29 асуулт)</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#0f1a30;
+      --card:#0f203b;
+      --text:#e8eefc;
+      --muted:#a9b7d6;
+      --accent:#6aa6ff;
+      --line:rgba(255,255,255,.10);
+      --chip:rgba(106,166,255,.14);
+      --ok:#26d07c;
+      --warn:#ffcc66;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue";
+      background: radial-gradient(1000px 600px at 20% 0%, rgba(106,166,255,.15), transparent 55%),
+                  radial-gradient(800px 500px at 90% 20%, rgba(38,208,124,.10), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+    a{color:var(--accent); text-decoration:none}
+    a:hover{text-decoration:underline}
+    header{
+      padding:28px 18px 18px;
+      border-bottom:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(15,26,48,.65), rgba(15,26,48,.15));
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(10px);
+      z-index: 5;
+    }
+    .wrap{max-width:1100px;margin:0 auto}
+    .title{
+      display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap;
+    }
+    .badge{
+      padding:6px 10px;
+      background: rgba(106,166,255,.18);
+      border:1px solid rgba(106,166,255,.35);
+      border-radius:999px;
+      font-size:12px;
+      color:var(--text);
+    }
+    h1{margin:0;font-size:20px; line-height:1.3}
+    .sub{margin:8px 0 0; color:var(--muted); font-size:13px; line-height:1.6}
+    main{padding:18px}
+    .grid{
+      display:grid;
+      grid-template-columns: 290px 1fr;
+      gap:16px;
+      align-items:start;
+    }
+    @media (max-width: 900px){
+      .grid{grid-template-columns:1fr}
+      .side{position:static}
+    }
+    .side{
+      position: sticky;
+      top: 110px;
+      padding:14px;
+      background: rgba(15,26,48,.55);
+      border:1px solid var(--line);
+      border-radius:14px;
+    }
+    .side h3{margin:0 0 10px;font-size:14px}
+    .toc{
+      max-height: 70vh;
+      overflow:auto;
+      padding-right:6px;
+    }
+    .toc a{
+      display:block;
+      padding:7px 10px;
+      border-radius:10px;
+      color: var(--muted);
+      font-size:13px;
+      border:1px solid transparent;
+      margin-bottom:6px;
+    }
+    .toc a:hover{
+      background: rgba(106,166,255,.10);
+      border-color: rgba(106,166,255,.20);
+      color: var(--text);
+      text-decoration:none;
+    }
+    .hint{
+      margin-top:10px;
+      font-size:12px;
+      color: var(--muted);
+      line-height:1.6;
+      border-top:1px dashed var(--line);
+      padding-top:10px;
+    }
+    .content{display:flex; flex-direction:column; gap:12px}
+    .card{
+      background: rgba(15,32,59,.62);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size:15px;
+      display:flex; gap:10px; align-items:center;
+    }
+    .qnum{
+      width:28px; height:28px;
+      border-radius:10px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(106,166,255,.16);
+      border:1px solid rgba(106,166,255,.30);
+      color: var(--text);
+      font-weight:700;
+      font-size:13px;
+      flex: 0 0 auto;
+    }
+    .row{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:10px;
+      align-items:start;
+    }
+    @media (max-width: 900px){
+      .row{grid-template-columns:1fr}
+    }
+    .block{
+      background: rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+    }
+    .label{
+      font-size:11px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color: var(--muted);
+      margin:0 0 8px;
+    }
+    ul{margin:0; padding-left:18px; color:var(--text)}
+    li{margin:6px 0; color:var(--text)}
+    .chips{display:flex; gap:8px; flex-wrap:wrap}
+    .chip{
+      font-size:12px;
+      color: var(--text);
+      padding:6px 10px;
+      border-radius:999px;
+      background: var(--chip);
+      border:1px solid rgba(106,166,255,.25);
+      white-space:nowrap;
+    }
+    details{
+      margin-top:10px;
+      background: rgba(255,255,255,.02);
+      border:1px dashed rgba(255,255,255,.14);
+      border-radius:14px;
+      padding:10px 12px;
+    }
+    summary{
+      cursor:pointer;
+      color: var(--accent);
+      font-weight:600;
+      outline:none;
+    }
+    .ex{
+      color: var(--muted);
+      margin-top:8px;
+      line-height:1.7;
+      font-size:13px;
+    }
+    .footer{
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size:12px;
+      text-align:center;
+      padding:18px 0 30px;
+    }
+    .ok{color:var(--ok)}
+    .warn{color:var(--warn)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="title">
+        <span class="badge">Лаб 2</span>
+        <span class="badge">Chapter 3</span>
+        <span class="badge">Requirements Determination (Шаардлага тодорхойлох)</span>
+      </div>
+      <h1>29 асуултад хариулсан товч web танилцуулга</h1>
+      <p class="sub">
+        Формат: <span class="ok">Тодорхойлолт</span> + Түлхүүр үг + Богино хариу + <span class="warn">Жишээ</span>.
+        (Англи нэр томьёо нь Монгол орчуулгатай хаалтанд.)
+      </p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="grid">
+      <aside class="side">
+        <h3>📌 TOC (Агуулга)</h3>
+        <div class="toc">
+          <!-- TOC links -->
+          <a href="#q1">1. Deliverables</a>
+          <a href="#q2">2. As-is vs To-be</a>
+          <a href="#q3">3. Requirements definition</a>
+          <a href="#q4">4. Analysis 3 алхам</a>
+          <a href="#q5">5. BPA/BPI/BPR</a>
+          <a href="#q6">6. Problem vs Root-cause</a>
+          <a href="#q7">7. Duration vs ABC</a>
+          <a href="#q8">8. BPR ба as-is</a>
+          <a href="#q9">9. Strategy factors</a>
+          <a href="#q10">10. Interview 5 алхам</a>
+          <a href="#q11">11. Question types</a>
+          <a href="#q12">12. Structured vs Unstructured</a>
+          <a href="#q13">13. Top-down vs Bottom-up</a>
+          <a href="#q14">14. Participant selection</a>
+          <a href="#q15">15. Facts vs Opinions</a>
+          <a href="#q16">16. JAD 5 алхам</a>
+          <a href="#q17">17. Facilitator vs Scribe</a>
+          <a href="#q18">18. Facilitator 3 ажил</a>
+          <a href="#q19">19. e-JAD</a>
+          <a href="#q20">20. Questionnaire vs Interview/JAD</a>
+          <a href="#q21">21. Response rate</a>
+          <a href="#q22">22. Document analysis</a>
+          <a href="#q23">23. Formal vs Informal</a>
+          <a href="#q24">24. Observation</a>
+          <a href="#q25">25. Method selection factors</a>
+          <a href="#q26">26. Concept map advantage</a>
+          <a href="#q27">27. Story cards & Task lists</a>
+          <a href="#q28">28. System proposal content</a>
+          <a href="#q29">29. Executive summary goal</a>
+        </div>
+
+        <div class="hint">
+          <strong>Лаб 2 сануулга:</strong><br/>
+          • Жишээ систем сонгоно<br/>
+          • SDLC-д цуглуулсан шаардлагыг оруулна<br/>
+          • Use case-ийг туршиж шалгана<br/>
+          • RFP ↔ Requirements нийцүүлнэ
+        </div>
+      </aside>
+
+      <section class="content">
+        <!-- Q1 -->
+        <article class="card" id="q1">
+          <h2><span class="qnum">1</span> Analysis deliverable (Шинжилгээний гарц) ба эцсийн deliverable</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Тодорхойлолт</div>
+              <ul>
+                <li><strong>Analysis deliverables</strong> = requirements + загварууд (models) зэрэг шинжилгээний үр дүн.</li>
+                <li><strong>Final deliverable</strong> = <strong>System proposal (Системийн санал)</strong> — шийдвэр гаргахад зориулсан нэгдсэн баримт.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">Requirements definition</span>
+                <span class="chip">Models</span>
+                <span class="chip">System proposal</span>
+                <span class="chip">Walkthrough</span>
+              </div>
+            </div>
+          </div>
+          <details>
+            <summary>Жишээ</summary>
+            <div class="ex">
+              eSIM систем: “Plan харах/сонгох → Төлбөр → QR/activation авах” урсгалын requirements + use case + загваруудыг нэгтгээд System proposal болгож танилцуулна.
+            </div>
+          </details>
+        </article>
+
+        <!-- Q2 -->
+        <article class="card" id="q2">
+          <h2><span class="qnum">2</span> As-is system (Одоогийн систем) vs To-be system (Ирээдүйн систем)</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Тодорхойлолт</div>
+              <ul>
+                <li><strong>As-is</strong> = одоо яг бодитоор ажиллаж буй процесс/систем.</li>
+                <li><strong>To-be</strong> = сайжруулсны дараах зорилтот процесс/систем.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">Current state</span>
+                <span class="chip">Future state</span>
+                <span class="chip">Gap</span>
+                <span class="chip">Improvement</span>
+              </div>
+            </div>
+          </div>
+          <details><summary>Жишээ</summary><div class="ex">
+            As-is: хэрэглэгч төлбөр хийсний дараа support-оос гараар QR авдаг. To-be: төлбөр баталгаажмагц систем автоматаар QR илгээнэ.
+          </div></details>
+        </article>
+
+        <!-- Q3 -->
+        <article class="card" id="q3">
+          <h2><span class="qnum">3</span> Requirements definition (Шаардлагын тодорхойлолт)-ын зорилго</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Тодорхойлолт</div>
+              <ul>
+                <li><strong>Requirements definition</strong> = системийн <strong>scope</strong> доторх <strong>functional</strong> + <strong>nonfunctional</strong> шаардлагын жагсаалт.</li>
+                <li>Зорилго: “Яг юу хийх вэ?”-г нэг мөр ойлгомжтой болгож, дараагийн model/design-д суурь болох.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">Scope</span>
+                <span class="chip">Functional</span>
+                <span class="chip">Nonfunctional</span>
+                <span class="chip">Priority</span>
+              </div>
+            </div>
+          </div>
+          <details><summary>Жишээ</summary><div class="ex">
+            Functional: “Order үүсгэнэ”. Nonfunctional: “Аюулгүй байдал—зөвхөн төлсөн хэрэглэгч QR үзнэ”.
+          </div></details>
+        </article>
+
+        <!-- Q4 -->
+        <article class="card" id="q4">
+          <h2><span class="qnum">4</span> Шинжилгээний үндсэн 3 алхам + яагаад заримдаа товч хийдэг вэ?</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Богино хариу</div>
+              <ul>
+                <li>1) Understand as-is (одоог ойлгох)</li>
+                <li>2) Identify improvements (сайжруулалт олох)</li>
+                <li>3) Define to-be requirements (шинэ шаардлага гаргах)</li>
+                <li>Заримдаа #1-ийг товч: одоогийн систем байхгүй / хугацаа багатай / хурдан үр дүн хүсэх.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">As-is</span>
+                <span class="chip">To-be</span>
+                <span class="chip">Improvement</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q5 -->
+        <article class="card" id="q5">
+          <h2><span class="qnum">5</span> BPA vs BPI vs BPR (Бизнес зорилго)</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Харьцуулалт</div>
+              <ul>
+                <li><strong>BPA (Automation / Автоматжуулалт):</strong> процесс өөрчлөхгүй, автомат болгох.</li>
+                <li><strong>BPI (Improvement / Сайжруулалт):</strong> дунд зэргийн өөрчлөлтөөр үр ашиг нэмэх.</li>
+                <li><strong>BPR (Reengineering / Үндсээр шинэчлэх):</strong> суурь зарчмыг эрс өөрчлөх.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">Automation</span>
+                <span class="chip">Incremental</span>
+                <span class="chip">Radical change</span>
+                <span class="chip">Risk</span>
+              </div>
+            </div>
+          </div>
+          <details><summary>Жишээ</summary><div class="ex">
+            BPA: invoice автоматаар үүсгэнэ. BPI: checkout алхмыг цөөлнө. BPR: бүхэлдээ self-service provisioning руу шилжинэ.
+          </div></details>
+        </article>
+
+        <!-- Q6 -->
+        <article class="card" id="q6">
+          <h2><span class="qnum">6</span> Problem analysis vs Root-cause analysis (Хэзээ аль нь?)</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Харьцуулалт</div>
+              <ul>
+                <li><strong>Problem analysis (Асуудлын шинжилгээ):</strong> асуудал → нөлөө → боломжит сайжруулалт.</li>
+                <li><strong>Root-cause analysis (Үндсэн шалтгаан):</strong> “яагаад?”-ыг гүн ухаж жинхэнэ шалтгаан олно.</li>
+                <li><strong>Хэзээ:</strong> хурдан оношлох → problem; давтагдах/гүн асуудал → root-cause.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">Symptom</span>
+                <span class="chip">Root cause</span>
+                <span class="chip">Five whys</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q7 -->
+        <article class="card" id="q7">
+          <h2><span class="qnum">7</span> Duration analysis vs Activity-based costing (ABC)</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Харьцуулалт</div>
+              <ul>
+                <li><strong>Duration analysis (Хугацааны шинжилгээ):</strong> аль алхам удаан вэ?</li>
+                <li><strong>ABC (Өртөг суурилсан тооцоо):</strong> аль алхам хамгийн үнэтэй вэ?</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">Time</span>
+                <span class="chip">Cost</span>
+                <span class="chip">Bottleneck</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q8 -->
+        <article class="card" id="q8">
+          <h2><span class="qnum">8</span> BPR үед as-is-ийг гүн судлах нь ашигтай юу?</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Гол санаа</div>
+              <ul>
+                <li>BPR нь шинэ санаа/шинэ ажиллах арга руу төвлөрөх хандлагатай.</li>
+                <li>Гэхдээ as-is-ийг <em>хангалттай</em> ойлговол бодит хязгаарлалт/эрсдэлийг алдахгүй.</li>
+                <li>Хэт удаан ухвал “хуучин сэтгэлгээнд баригдах” эрсдэлтэй.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">BPR focus</span>
+                <span class="chip">Constraints</span>
+                <span class="chip">Risk</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q9 -->
+        <article class="card" id="q9">
+          <h2><span class="qnum">9</span> Analysis strategy сонгох хүчин зүйлс</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">4 хүчин зүйл</div>
+              <ul>
+                <li>Potential business value (ашгийн боломж)</li>
+                <li>Project cost (өртөг)</li>
+                <li>Breadth of analysis (хамрах хүрээ)</li>
+                <li>Risk (эрсдэл)</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">Value</span>
+                <span class="chip">Cost</span>
+                <span class="chip">Breadth</span>
+                <span class="chip">Risk</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q10 -->
+        <article class="card" id="q10">
+          <h2><span class="qnum">10</span> Interview (Ярилцлага) хийх 5 алхам</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">5 алхам</div>
+              <ul>
+                <li>Select interviewees (хүмүүсээ сонгох)</li>
+                <li>Design questions (асуулт бэлдэх)</li>
+                <li>Prepare (бэлтгэл)</li>
+                <li>Conduct (ярилцлага хийх)</li>
+                <li>Follow-up (баталгаажуулах/тайлан)</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">Stakeholder</span>
+                <span class="chip">Notes</span>
+                <span class="chip">Interview report</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q11 -->
+        <article class="card" id="q11">
+          <h2><span class="qnum">11</span> Closed-ended / Open-ended / Probing question</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Ялгаа</div>
+              <ul>
+                <li><strong>Closed-ended (хаалттай):</strong> сонголт/тийм-үгүй → хурдан, тоон өгөгдөл.</li>
+                <li><strong>Open-ended (нээлттэй):</strong> дэлгэрэнгүй тайлбар → “яагаад/яаж”.</li>
+                <li><strong>Probing (гүнзгийрүүлэх):</strong> өмнөх хариуг нарийвчлах.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Хэзээ ашиглах вэ?</div>
+              <ul>
+                <li>Closed: хэмжих/тооцох үед</li>
+                <li>Open: ойлголт нээх үед</li>
+                <li>Probing: тодорхойгүй хариуг баталгаажуулах үед</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q12 -->
+        <article class="card" id="q12">
+          <h2><span class="qnum">12</span> Unstructured interview vs Structured interview</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Ялгаа</div>
+              <ul>
+                <li><strong>Unstructured (чөлөөт):</strong> сэдвийн хүрээнд уян хатан явна.</li>
+                <li><strong>Structured (бүтэцтэй):</strong> урьдчилан бэлдсэн асуултын багцтай.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Хэзээ ашиглах вэ?</div>
+              <ul>
+                <li>Unstructured: домэйн ойлгох, шинэ асуудал нээх</li>
+                <li>Structured: олон хүнээс ижил төрлийн мэдээлэл цуглуулах</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q13 -->
+        <article class="card" id="q13">
+          <h2><span class="qnum">13</span> Top-down vs Bottom-up ярилцлагын хандлага</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Ялгаа</div>
+              <ul>
+                <li><strong>Top-down:</strong> ерөнхий → нарийн.</li>
+                <li><strong>Bottom-up:</strong> нарийн детал → ерөнхий зураглал.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Хэзээ?</div>
+              <ul>
+                <li>Top-down: “том зураг” хэрэгтэй үед</li>
+                <li>Bottom-up: бодит алхмуудыг нарийвчлах үед</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q14 -->
+        <article class="card" id="q14">
+          <h2><span class="qnum">14</span> Interview & JAD-д оролцогчдыг хэрхэн сонгодог вэ?</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Гол санаа</div>
+              <ul>
+                <li><strong>Interview:</strong> гол stakeholders (хэрэглэгч, менежер, IT, support) — олон өнцөг.</li>
+                <li><strong>JAD:</strong> шийдвэр гаргах эрх/мэдлэгтэй хүмүүсийг нэг дор цуглуулах + management support.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">Stakeholders</span>
+                <span class="chip">Decision makers</span>
+                <span class="chip">Management support</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q15 -->
+        <article class="card" id="q15">
+          <h2><span class="qnum">15</span> Facts (баримт) vs Opinions (санал бодол)</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Ялгаа</div>
+              <ul>
+                <li><strong>Facts:</strong> тоо/давтамж/хугацаа гэх мэт хэмжигдэхүйц мэдээлэл.</li>
+                <li><strong>Opinions:</strong> сэтгэл ханамж, санал нийлэх/үл нийлэх зэрэг үнэлгээ.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Яагаад хоёулаа хэрэгтэй?</div>
+              <ul>
+                <li>Facts → “яг юу болж байна?”</li>
+                <li>Opinions → “юуг түрүүлж сайжруулах вэ?”</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q16 -->
+        <article class="card" id="q16">
+          <h2><span class="qnum">16</span> JAD session (Хамтарсан уулзалт) хийх 5 алхам</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">5 алхам (товч)</div>
+              <ul>
+                <li>1) Select participants (оролцогч сонгох)</li>
+                <li>2) Prepare (agenda, материал)</li>
+                <li>3) Conduct (session явуулах)</li>
+                <li>4) Document (шийдвэр/шаардлага тэмдэглэх)</li>
+                <li>5) Follow-up (post-session report)</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">Workshop</span>
+                <span class="chip">Facilitator</span>
+                <span class="chip">Consensus</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q17 -->
+        <article class="card" id="q17">
+          <h2><span class="qnum">17</span> JAD Facilitator (Хөтлөгч) vs Scribe (Тэмдэглэгч)</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Үүрэг</div>
+              <ul>
+                <li><strong>Facilitator:</strong> хэлэлцүүлгийг удирдаж, цаг/явцыг барина.</li>
+                <li><strong>Scribe:</strong> шийдвэр, шаардлага, тэмдэглэлийг бүртгэнэ.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">Moderate</span>
+                <span class="chip">Notes</span>
+                <span class="chip">Report</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q18 -->
+        <article class="card" id="q18">
+          <h2><span class="qnum">18</span> Facilitator-ийн 3 үндсэн ажил</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">3 ажил</div>
+              <ul>
+                <li>Process management (явц/agenda/цаг)</li>
+                <li>Content management (асуудал дээр төвлөрүүлэх)</li>
+                <li>Group dynamics (оролцооны тэнцвэр, маргаан зохицуулах)</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">Schedule</span>
+                <span class="chip">Conflict</span>
+                <span class="chip">Engagement</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q19 -->
+        <article class="card" id="q19">
+          <h2><span class="qnum">19</span> e-JAD (Цахим JAD) гэж юу вэ? Яагаад ашигладаг вэ?</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Тодорхойлолт</div>
+              <ul>
+                <li><strong>e-JAD:</strong> онлайн хэрэгсэл/хамтын платформ ашиглан JAD-г явуулах.</li>
+                <li>Шалтгаан: хурдан нийцэл, distributed team, зэрэг input, хурдан баримтжуулалт.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">Online workshop</span>
+                <span class="chip">Collaboration</span>
+                <span class="chip">Speed</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q20 -->
+        <article class="card" id="q20">
+          <h2><span class="qnum">20</span> Questionnaire (Асуулга) — Interview/JAD-аас юугаараа өөр вэ?</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Гол ялгаа</div>
+              <ul>
+                <li>Асуулгыг явуулсны дараа analyst “тодруулах” боломжгүй → wording маш тодорхой байх ёстой.</li>
+                <li>Ихэвчлэн closed-ended давамгай → дүн шинжилгээ хийхэд амар.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">Clarity</span>
+                <span class="chip">Scale</span>
+                <span class="chip">Standardization</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q21 -->
+        <article class="card" id="q21">
+          <h2><span class="qnum">21</span> Questionnaire response rate (Хариу өгөх хувь) + нэмэгдүүлэх арга</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Ерөнхий тоо</div>
+              <ul>
+                <li>Paper/Email: ~30–50%</li>
+                <li>Web: ~5–30%</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Нэмэгдүүлэх</div>
+              <ul>
+                <li>Reminder (сануулах)</li>
+                <li>Incentive (урамшуулал)</li>
+                <li>Deadline + ач холбогдлыг тайлбарлах</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q22 -->
+        <article class="card" id="q22">
+          <h2><span class="qnum">22</span> Document analysis (Баримт бичгийн шинжилгээ) гэж юу вэ?</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Тодорхойлолт</div>
+              <ul>
+                <li>Дүрэм, журам, маягт, тайлан, гарын авлага зэрэг баримтуудыг шалгаж мэдээлэл цуглуулах арга.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">Policies</span>
+                <span class="chip">Forms</span>
+                <span class="chip">Reports</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q23 -->
+        <article class="card" id="q23">
+          <h2><span class="qnum">23</span> Formal system vs Informal system + document analysis</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Ялгаа</div>
+              <ul>
+                <li><strong>Formal (албан ёсны):</strong> бичиг баримтад заасан “ёстой” процесс.</li>
+                <li><strong>Informal (албан бус):</strong> бодит амьдрал дээр хүмүүсийн “үнэндээ” хийдэг процесс.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Document analysis яаж тусалдаг вэ?</div>
+              <ul>
+                <li>Formal-г баримтаас ойлгоно</li>
+                <li>Зөрүү гарвал interview/observation-оор informal-г баталгаажуулна</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q24 -->
+        <article class="card" id="q24">
+          <h2><span class="qnum">24</span> Observation (Ажиглалт) ашиглахын гол талууд</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Гол санаа</div>
+              <ul>
+                <li>Бодит ажлын урсгалыг “хийж байгаагаар нь” харах.</li>
+                <li>Давуу тал: informal процесс, жижиг алхам/shortcut-ууд илрүүлнэ.</li>
+                <li>Анхаарах: саад болохгүй, зан өөрчлөгдөх эрсдэлтэй.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">Reality</span>
+                <span class="chip">Workflow</span>
+                <span class="chip">Non-intrusive</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q25 -->
+        <article class="card" id="q25">
+          <h2><span class="qnum">25</span> Мэдээлэл цуглуулах аргыг сонгох хүчин зүйлс</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Хүчин зүйлс</div>
+              <ul>
+                <li>Type of info (баримт/санал бодол)</li>
+                <li>Depth (гүн)</li>
+                <li>Breadth (өргөн хүрээ)</li>
+                <li>User involvement (оролцоо)</li>
+                <li>Cost (зардал)</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">Depth</span>
+                <span class="chip">Breadth</span>
+                <span class="chip">Cost</span>
+                <span class="chip">Users</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q26 -->
+        <article class="card" id="q26">
+          <h2><span class="qnum">26</span> Concept map (Ойлголтын зураглал) — текст баримтаас давуу тал</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Давуу тал</div>
+              <ul>
+                <li>Шаардлагуудын <strong>хоорондын холбоо</strong>-г нэг зураг дээр харуулна.</li>
+                <li>“Юу юутай хамаатай вэ?” гэдгийг хурдан ойлгуулна.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">Relationships</span>
+                <span class="chip">Visualization</span>
+                <span class="chip">Big picture</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q27 -->
+        <article class="card" id="q27">
+          <h2><span class="qnum">27</span> Story cards (Түүхийн карт) & Task lists (Ажлын жагсаалт) давуу тал</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Давуу тал</div>
+              <ul>
+                <li>Нэг card = нэг requirement → ойлгомжтой, жижиглэхэд амар.</li>
+                <li>Task list → хэрэгжүүлэх ажлууд тодорхой болно.</li>
+                <li>Уян хатан: өөрчлөлтөд хурдан дасан зохицно.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">Agile</span>
+                <span class="chip">Portable</span>
+                <span class="chip">Easy updates</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q28 -->
+        <article class="card" id="q28">
+          <h2><span class="qnum">28</span> System proposal (Системийн санал)-д ямар мэдээлэл багтдаг вэ?</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Ерөнхий бүтэц</div>
+              <ul>
+                <li>Executive summary</li>
+                <li>System request</li>
+                <li>Workplan</li>
+                <li>Feasibility analysis</li>
+                <li>Requirements definition</li>
+                <li>Models + Appendices</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">Feasibility</span>
+                <span class="chip">Plan</span>
+                <span class="chip">Requirements</span>
+                <span class="chip">Models</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q29 -->
+        <article class="card" id="q29">
+          <h2><span class="qnum">29</span> Executive summary (Гүйцэтгэх хураангуй)-ийн зорилго</h2>
+          <div class="row">
+            <div class="block">
+              <div class="label">Зорилго</div>
+              <ul>
+                <li>Завгүй удирдлагад proposal-ын <strong>хамгийн чухал</strong> хэсгийг хурдан ойлгуулах.</li>
+                <li>“Approve / revise / reject” шийдвэрт туслах.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <div class="label">Түлхүүр үг</div>
+              <div class="chips">
+                <span class="chip">Decision support</span>
+                <span class="chip">High-level</span>
+                <span class="chip">Summary</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <div class="footer">
+          ✅ Хэрвээ хүсвэл би энэ вэб хуудсыг “төрөлжүүлээд”: <br/>
+          • өөрийн жишээ системийн нэр/логогоор <br/>
+          • RFP → Requirements mapping хүснэгттэй <br/>
+          • Use case test checklist хэсэгтэй болгож өгч болно.
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
