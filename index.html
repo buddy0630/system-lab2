@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Лаб 2 — Chapter 3: Requirements Determination (29 асуулт)</title>
+  <title>Лаб 2 — Chapter 3 (29 асуулт) | Web</title>
   <style>
     :root{
       --bg:#0b1220;
@@ -14,8 +14,9 @@
       --accent:#6aa6ff;
       --line:rgba(255,255,255,.10);
       --chip:rgba(106,166,255,.14);
-      --ok:#26d07c;
-      --warn:#ffcc66;
+
+      --quote:rgba(46,229,157,.10);
+      --quoteLine:rgba(46,229,157,.35);
     }
     *{box-sizing:border-box}
     body{
@@ -26,21 +27,21 @@
                   var(--bg);
       color:var(--text);
     }
-    a{color:var(--accent); text-decoration:none}
-    a:hover{text-decoration:underline}
     header{
-      padding:28px 18px 18px;
+      padding:18px 18px 14px;
       border-bottom:1px solid var(--line);
-      background: linear-gradient(180deg, rgba(15,26,48,.65), rgba(15,26,48,.15));
+      background: rgba(15,26,48,.65);
       position: sticky;
       top: 0;
       backdrop-filter: blur(10px);
-      z-index: 5;
+      z-index: 10;
     }
     .wrap{max-width:1100px;margin:0 auto}
-    .title{
-      display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap;
+    .top{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px; flex-wrap:wrap;
     }
+    .leftTop{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
     .badge{
       padding:6px 10px;
       background: rgba(106,166,255,.18);
@@ -48,13 +49,29 @@
       border-radius:999px;
       font-size:12px;
       color:var(--text);
+      font-weight:700;
     }
-    h1{margin:0;font-size:20px; line-height:1.3}
-    .sub{margin:8px 0 0; color:var(--muted); font-size:13px; line-height:1.6}
+    h1{margin:10px 0 0;font-size:18px; line-height:1.3}
+    .sub{margin:6px 0 0; color:var(--muted); font-size:13px; line-height:1.6}
+
+    .navBtns{display:flex; gap:8px; align-items:center}
+    button{
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 8px 11px;
+      border-radius: 12px;
+      font-weight:700;
+      font-size:12px;
+    }
+    button:hover{border-color: rgba(106,166,255,.45); background: rgba(106,166,255,.12)}
+    .counter{color:var(--muted); font-size:12px; min-width:72px; text-align:right}
+
     main{padding:18px}
     .grid{
       display:grid;
-      grid-template-columns: 290px 1fr;
+      grid-template-columns: 300px 1fr;
       gap:16px;
       align-items:start;
     }
@@ -62,9 +79,10 @@
       .grid{grid-template-columns:1fr}
       .side{position:static}
     }
+
     .side{
       position: sticky;
-      top: 110px;
+      top: 106px;
       padding:14px;
       background: rgba(15,26,48,.55);
       border:1px solid var(--line);
@@ -84,12 +102,12 @@
       font-size:13px;
       border:1px solid transparent;
       margin-bottom:6px;
+      text-decoration:none;
     }
     .toc a:hover{
       background: rgba(106,166,255,.10);
       border-color: rgba(106,166,255,.20);
       color: var(--text);
-      text-decoration:none;
     }
     .hint{
       margin-top:10px;
@@ -99,12 +117,14 @@
       border-top:1px dashed var(--line);
       padding-top:10px;
     }
+
     .content{display:flex; flex-direction:column; gap:12px}
     .card{
       background: rgba(15,32,59,.62);
       border:1px solid var(--line);
       border-radius:16px;
       padding:14px;
+      scroll-margin-top: 110px;
     }
     .card h2{
       margin:0 0 10px;
@@ -120,10 +140,11 @@
       background: rgba(106,166,255,.16);
       border:1px solid rgba(106,166,255,.30);
       color: var(--text);
-      font-weight:700;
+      font-weight:800;
       font-size:13px;
       flex: 0 0 auto;
     }
+
     .row{
       display:grid;
       grid-template-columns: 1.1fr .9fr;
@@ -158,6 +179,22 @@
       border:1px solid rgba(106,166,255,.25);
       white-space:nowrap;
     }
+
+    /* ✅ NEW: Brief answer line (visible, between definition and example) */
+    .briefAnswer{
+      margin-top:10px;
+      background: rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      padding:10px 12px;
+      color: var(--text);
+      line-height:1.65;
+      font-size:13px;
+    }
+    .briefAnswer b{
+      color: var(--accent);
+    }
+
     details{
       margin-top:10px;
       background: rgba(255,255,255,.02);
@@ -168,776 +205,695 @@
     summary{
       cursor:pointer;
       color: var(--accent);
-      font-weight:600;
+      font-weight:800;
       outline:none;
     }
+
+    /* Book-note box inside example */
+    .bookNote{
+      background: var(--quote);
+      border:1px solid var(--quoteLine);
+      border-left: 4px solid rgba(46,229,157,.85);
+      border-radius:14px;
+      padding:12px;
+      margin-top:10px;
+      margin-bottom:10px;
+    }
+    .bookNote p{margin:0; color: var(--text); line-height:1.65; font-size:13px}
+    .bookNote .small{margin-top:6px; color: var(--muted); font-size:12px}
+
     .ex{
       color: var(--muted);
-      margin-top:8px;
       line-height:1.7;
       font-size:13px;
+      background: rgba(0,0,0,.12);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      padding:10px 12px;
     }
-    .footer{
-      margin: 18px 0 0;
-      color: var(--muted);
-      font-size:12px;
-      text-align:center;
-      padding:18px 0 30px;
-    }
-    .ok{color:var(--ok)}
-    .warn{color:var(--warn)}
+    .ex b{color:var(--text)}
   </style>
 </head>
+
 <body>
-  <header>
-    <div class="wrap">
-      <div class="title">
+<header>
+  <div class="wrap">
+    <div class="top">
+      <div class="leftTop">
         <span class="badge">Лаб 2</span>
         <span class="badge">Chapter 3</span>
-        <span class="badge">Requirements Determination (Шаардлага тодорхойлох)</span>
+        <span class="badge">29 асуулт</span>
+        <span class="badge" id="sysTag">Жишээ систем: eSIM</span>
       </div>
-      <h1>29 асуултад хариулсан товч web танилцуулга</h1>
-      <p class="sub">
-        Формат: <span class="ok">Тодорхойлолт</span> + Түлхүүр үг + Богино хариу + <span class="warn">Жишээ</span>.
-        (Англи нэр томьёо нь Монгол орчуулгатай хаалтанд.)
-      </p>
+      <div class="navBtns">
+        <span class="counter" id="counter">1 / 29</span>
+        <button id="prev" type="button">Prev</button>
+        <button id="next" type="button">Next</button>
+      </div>
     </div>
-  </header>
 
-  <main class="wrap">
-    <div class="grid">
-      <aside class="side">
-        <h3>📌 TOC (Агуулга)</h3>
-        <div class="toc">
-          <!-- TOC links -->
-          <a href="#q1">1. Deliverables</a>
-          <a href="#q2">2. As-is vs To-be</a>
-          <a href="#q3">3. Requirements definition</a>
-          <a href="#q4">4. Analysis 3 алхам</a>
-          <a href="#q5">5. BPA/BPI/BPR</a>
-          <a href="#q6">6. Problem vs Root-cause</a>
-          <a href="#q7">7. Duration vs ABC</a>
-          <a href="#q8">8. BPR ба as-is</a>
-          <a href="#q9">9. Strategy factors</a>
-          <a href="#q10">10. Interview 5 алхам</a>
-          <a href="#q11">11. Question types</a>
-          <a href="#q12">12. Structured vs Unstructured</a>
-          <a href="#q13">13. Top-down vs Bottom-up</a>
-          <a href="#q14">14. Participant selection</a>
-          <a href="#q15">15. Facts vs Opinions</a>
-          <a href="#q16">16. JAD 5 алхам</a>
-          <a href="#q17">17. Facilitator vs Scribe</a>
-          <a href="#q18">18. Facilitator 3 ажил</a>
-          <a href="#q19">19. e-JAD</a>
-          <a href="#q20">20. Questionnaire vs Interview/JAD</a>
-          <a href="#q21">21. Response rate</a>
-          <a href="#q22">22. Document analysis</a>
-          <a href="#q23">23. Formal vs Informal</a>
-          <a href="#q24">24. Observation</a>
-          <a href="#q25">25. Method selection factors</a>
-          <a href="#q26">26. Concept map advantage</a>
-          <a href="#q27">27. Story cards & Task lists</a>
-          <a href="#q28">28. System proposal content</a>
-          <a href="#q29">29. Executive summary goal</a>
-        </div>
+    <h1>Requirements Determination — Web (тодорхойлолт + түлхүүр үг + товч хариулт + жишээ)</h1>
+    <p class="sub">
+      ✅ Шинэ нэмэлт: “Товч хариулт” нь тодорхойлолтын доор, жишээний дээр харагдана.
+      (← → товчоор next/prev ажиллана)
+    </p>
+  </div>
+</header>
 
-        <div class="hint">
-          <strong>Лаб 2 сануулга:</strong><br/>
-          • Жишээ систем сонгоно<br/>
-          • SDLC-д цуглуулсан шаардлагыг оруулна<br/>
-          • Use case-ийг туршиж шалгана<br/>
-          • RFP ↔ Requirements нийцүүлнэ
-        </div>
-      </aside>
+<main class="wrap">
+  <div class="grid">
+    <aside class="side">
+      <h3>📌 TOC (Агуулга)</h3>
+      <div class="toc" id="toc"></div>
+      <div class="hint">
+        <strong>Лаб 2 сануулга:</strong><br/>
+        • Жишээ систем авна<br/>
+        • SDLC-д цуглуулсан шаардлагыг оруулна<br/>
+        • Use-case-ийг туршиж шалгана<br/>
+        • RFP ↔ Requirements нийцүүлнэ
+      </div>
+    </aside>
 
-      <section class="content">
-        <!-- Q1 -->
-        <article class="card" id="q1">
-          <h2><span class="qnum">1</span> Analysis deliverable (Шинжилгээний гарц) ба эцсийн deliverable</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Тодорхойлолт</div>
-              <ul>
-                <li><strong>Analysis deliverables</strong> = requirements + загварууд (models) зэрэг шинжилгээний үр дүн.</li>
-                <li><strong>Final deliverable</strong> = <strong>System proposal (Системийн санал)</strong> — шийдвэр гаргахад зориулсан нэгдсэн баримт.</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">Requirements definition</span>
-                <span class="chip">Models</span>
-                <span class="chip">System proposal</span>
-                <span class="chip">Walkthrough</span>
-              </div>
-            </div>
-          </div>
-          <details>
-            <summary>Жишээ</summary>
-            <div class="ex">
-              eSIM систем: “Plan харах/сонгох → Төлбөр → QR/activation авах” урсгалын requirements + use case + загваруудыг нэгтгээд System proposal болгож танилцуулна.
-            </div>
-          </details>
-        </article>
+    <section class="content" id="content"></section>
+  </div>
+</main>
 
-        <!-- Q2 -->
-        <article class="card" id="q2">
-          <h2><span class="qnum">2</span> As-is system (Одоогийн систем) vs To-be system (Ирээдүйн систем)</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Тодорхойлолт</div>
-              <ul>
-                <li><strong>As-is</strong> = одоо яг бодитоор ажиллаж буй процесс/систем.</li>
-                <li><strong>To-be</strong> = сайжруулсны дараах зорилтот процесс/систем.</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">Current state</span>
-                <span class="chip">Future state</span>
-                <span class="chip">Gap</span>
-                <span class="chip">Improvement</span>
-              </div>
-            </div>
-          </div>
-          <details><summary>Жишээ</summary><div class="ex">
-            As-is: хэрэглэгч төлбөр хийсний дараа support-оос гараар QR авдаг. To-be: төлбөр баталгаажмагц систем автоматаар QR илгээнэ.
-          </div></details>
-        </article>
+<script>
+  const exampleSystemName = "eSIM";
+  document.getElementById("sysTag").textContent = "Жишээ систем: " + exampleSystemName;
 
-        <!-- Q3 -->
-        <article class="card" id="q3">
-          <h2><span class="qnum">3</span> Requirements definition (Шаардлагын тодорхойлолт)-ын зорилго</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Тодорхойлолт</div>
-              <ul>
-                <li><strong>Requirements definition</strong> = системийн <strong>scope</strong> доторх <strong>functional</strong> + <strong>nonfunctional</strong> шаардлагын жагсаалт.</li>
-                <li>Зорилго: “Яг юу хийх вэ?”-г нэг мөр ойлгомжтой болгож, дараагийн model/design-д суурь болох.</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">Scope</span>
-                <span class="chip">Functional</span>
-                <span class="chip">Nonfunctional</span>
-                <span class="chip">Priority</span>
-              </div>
-            </div>
-          </div>
-          <details><summary>Жишээ</summary><div class="ex">
-            Functional: “Order үүсгэнэ”. Nonfunctional: “Аюулгүй байдал—зөвхөн төлсөн хэрэглэгч QR үзнэ”.
-          </div></details>
-        </article>
+  const data = [
+    {
+      n:1,
+      q:"Analysis (шинжилгээ) үе шатны гол deliverable (гарц) юу вэ? Эцсийн deliverable юу вэ, түүнд юу багтдаг вэ?",
+      def:[
+        "Analysis deliverables = requirements + загварууд (models) зэрэг шинжилгээний үр дүн.",
+        "Final deliverable = System proposal (Системийн санал) — шийдвэр гаргахад зориулсан нэгдсэн баримт."
+      ],
+      keys:["Requirements definition","Models","System proposal","Walkthrough"],
+      short:"Шинжилгээний гол гарц нь requirements definition (шаардлагын тодорхойлолт) ба models (загварууд); харин тэдгээрийг feasibility/workplan-тай нэгтгэсэн эцсийн баримт нь system proposal (системийн санал) юм.",
+      book:"Analysis үе шат нь planning үеийн ерөнхий санааг (system request) нарийвчилж requirements болон models болгон боловсруулдаг; эдгээрийг feasibility/workplan зэрэгтэй нэгтгээд system proposal болгон шийдвэр гаргахад ашигладаг.",
+      bookHint:"Уншаад хэлэх: “Deliverables → proposal-д нэгтгэнэ.”",
+      ex:[
+        "Requirements: Plan харах/сонгох, Order үүсгэх, Payment баталгаажуулах, QR авах.",
+        "Models: Use case + diagram-уудаар урсгалыг баталгаажуулна.",
+        "Final: Бүгдийг нэгтгээд system proposal болгож stakeholder/удирдлагад танилцуулна."
+      ]
+    },
+    {
+      n:2,
+      q:"As-is system (одоогийн систем) ба To-be system (шинэ/ирээдүйн систем) хоёрын ялгаа юу вэ?",
+      def:[
+        "As-is = одоо бодитоор ажиллаж буй процесс/системийн төлөв.",
+        "To-be = сайжруулсны дараах зорилтот ирээдүйн төлөв (шинэ систем)."
+      ],
+      keys:["As-is","To-be","Current state","Future state","Gap"],
+      short:"As-is system нь өнөөдөр ажиллаж буй бодит төлөв, харин To-be system нь сайжруулалтын дараах хүсэж буй ирээдүйн төлөв бөгөөд энэ хоёрын зөрүү (gap) дээр суурилж шаардлага гарна.",
+      book:"Шинжилгээнд одоогийн байдлыг (as-is) ойлгоод сайжруулалтын боломжийг тодорхойлж, дараа нь зорилтот шинэ байдлын (to-be) шаардлагыг тогтоодог; As-is → To-be шилжилтийг gap гэж үзэж болно.",
+      bookHint:"Уншаад хэлэх: “As-is бол одоо, To-be бол дараа.”",
+      ex:[
+        "As-is: төлбөр хийсний дараа support гараар QR явуулдаг.",
+        "To-be: төлбөр баталгаажмагц систем автоматаар QR/activation илгээнэ."
+      ]
+    },
+    {
+      n:3,
+      q:"Requirements definition (шаардлагын тодорхойлолт)-ын зорилго юу вэ?",
+      def:[
+        "Scope (хамрах хүрээ) доторх functional + nonfunctional шаардлагыг жагсааж тодорхойлох.",
+        "Баг/захиалагч нэг ойлголттой болох ба дараагийн model/design-ийн суурь болно."
+      ],
+      keys:["Scope","Functional","Nonfunctional","Baseline","Agreement"],
+      short:"Requirements definition нь системийн scope (хамрах хүрээ)-д багтах functional (юу хийх) ба nonfunctional (ямар чанартай) шаардлагыг нэгтгэн тогтоож, дараагийн загварчлал/дизайны суурь баримт болдог.",
+      book:"Requirements definition нь системийн scope-д багтах шаардлагуудын албан ёсны жагсаалт бөгөөд functional болон nonfunctional гэж ангилна; энэ нь analysis models болон design-ийг чиглүүлдэг.",
+      bookHint:"Уншаад хэлэх: “Build хийх зүйлээ нэг мөр болгоно.”",
+      ex:[
+        "Functional: Plan харах → Order → Payment → QR авах.",
+        "Nonfunctional: Security, Performance, Availability."
+      ]
+    },
 
-        <!-- Q4 -->
-        <article class="card" id="q4">
-          <h2><span class="qnum">4</span> Шинжилгээний үндсэн 3 алхам + яагаад заримдаа товч хийдэг вэ?</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Богино хариу</div>
-              <ul>
-                <li>1) Understand as-is (одоог ойлгох)</li>
-                <li>2) Identify improvements (сайжруулалт олох)</li>
-                <li>3) Define to-be requirements (шинэ шаардлага гаргах)</li>
-                <li>Заримдаа #1-ийг товч: одоогийн систем байхгүй / хугацаа багатай / хурдан үр дүн хүсэх.</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">As-is</span>
-                <span class="chip">To-be</span>
-                <span class="chip">Improvement</span>
-              </div>
-            </div>
-          </div>
-        </article>
+    {
+      n:4,
+      q:"Шинжилгээний процессын үндсэн гурван алхам юу вэ? Аль алхмыг заримдаа товч хийх нь бий вэ? Яагаад?",
+      def:[
+        "1) As-is ойлгох  2) Improvements олох  3) To-be requirements боловсруулах.",
+        "Заримдаа #1 (as-is) товч: одоогийн систем байхгүй / хугацаа багатай / шууд шинэ бүтээгдэхүүн."
+      ],
+      keys:["3 steps","As-is","Improvements","To-be","Time pressure"],
+      short:"Шинжилгээ нь as-is (одоог) ойлгох → сайжруулалт (improvements) олох → to-be шаардлага боловсруулах 3 алхамтай бөгөөд шинээр “0-оос” бүтээгдэхүүн хийх үед as-is алхам богино байж болно.",
+      book:"Шинжилгээ ихэвчлэн 3 алхамтай явна: одоог ойлгох → сайжруулах боломж олох → шинэ шаардлага гаргах; шинэ системийг 0-оос эхлүүлэх үед as-is алхам богино байх боломжтой.",
+      bookHint:"Уншаад хэлэх: “As-is → Improve → To-be.”",
+      ex:[
+        "Шинэ eSIM marketplace эхэлж байвал as-is бага.",
+        "Одоо байгаа процесс байвал as-is-ийг гүн судална."
+      ]
+    },
 
-        <!-- Q5 -->
-        <article class="card" id="q5">
-          <h2><span class="qnum">5</span> BPA vs BPI vs BPR (Бизнес зорилго)</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Харьцуулалт</div>
-              <ul>
-                <li><strong>BPA (Automation / Автоматжуулалт):</strong> процесс өөрчлөхгүй, автомат болгох.</li>
-                <li><strong>BPI (Improvement / Сайжруулалт):</strong> дунд зэргийн өөрчлөлтөөр үр ашиг нэмэх.</li>
-                <li><strong>BPR (Reengineering / Үндсээр шинэчлэх):</strong> суурь зарчмыг эрс өөрчлөх.</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">Automation</span>
-                <span class="chip">Incremental</span>
-                <span class="chip">Radical change</span>
-                <span class="chip">Risk</span>
-              </div>
-            </div>
-          </div>
-          <details><summary>Жишээ</summary><div class="ex">
-            BPA: invoice автоматаар үүсгэнэ. BPI: checkout алхмыг цөөлнө. BPR: бүхэлдээ self-service provisioning руу шилжинэ.
-          </div></details>
-        </article>
+    {
+      n:5,
+      q:"BPA, BPI, BPR-ийн бизнесийн зорилгуудыг харьцуулж тайлбарла.",
+      def:[
+        "BPA (Automation): процесс өөрчлөхгүй, технологиор автоматжуулах.",
+        "BPI (Improvement): дунд зэргийн өөрчлөлтөөр үр ашгийг нэмэх.",
+        "BPR (Reengineering): бизнесийн процессийг үндсээр нь эрс өөрчлөх."
+      ],
+      keys:["BPA","BPI","BPR","Automation","Radical change"],
+      short:"BPA нь одоогийн процессыг автоматаар хурдан болгох, BPI нь процессыг сайжруулж үр ашгийг нэмэх, харин BPR нь процессыг үндсээр нь дахин зохиож (radical change) хамгийн том өөрчлөлт хийх зорилготой.",
+      book:"Процессын өөрчлөлтийн хэмжээгээр ялгана: BPA бага өөрчлөлттэй, BPI сайжруулалт, BPR эрс шинэчлэлт бөгөөд үр ашиг их ч эрсдэл өндөр байж болно.",
+      bookHint:"Уншаад хэлэх: “BPA < BPI < BPR (өөрчлөлтийн хэмжээ өснө).”",
+      ex:[
+        "BPA: invoice автомат үүсгэнэ.",
+        "BPI: checkout алхмыг цөөлнө.",
+        "BPR: provisioning-ийг бүрэн self-service болгож шинэчилнэ."
+      ]
+    },
 
-        <!-- Q6 -->
-        <article class="card" id="q6">
-          <h2><span class="qnum">6</span> Problem analysis vs Root-cause analysis (Хэзээ аль нь?)</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Харьцуулалт</div>
-              <ul>
-                <li><strong>Problem analysis (Асуудлын шинжилгээ):</strong> асуудал → нөлөө → боломжит сайжруулалт.</li>
-                <li><strong>Root-cause analysis (Үндсэн шалтгаан):</strong> “яагаад?”-ыг гүн ухаж жинхэнэ шалтгаан олно.</li>
-                <li><strong>Хэзээ:</strong> хурдан оношлох → problem; давтагдах/гүн асуудал → root-cause.</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">Symptom</span>
-                <span class="chip">Root cause</span>
-                <span class="chip">Five whys</span>
-              </div>
-            </div>
-          </div>
-        </article>
+    {
+      n:6,
+      q:"Problem analysis (асуудлын шинжилгээ) ба Root-cause analysis (үндсэн шалтгааны шинжилгээ)-г харьцуул. Ямар нөхцөлд алийг ашиглах вэ?",
+      def:[
+        "Problem analysis: асуудал/үр дагаврыг зураглаж хурдан ойлгох.",
+        "Root-cause: “яагаад?”-ыг гүн ухаж үндсэн шалтгаан олно."
+      ],
+      keys:["Problem analysis","Root cause","Symptom","Five whys"],
+      short:"Problem analysis нь шинж тэмдэг (symptom)-ийг зураглаж ойлгоход, root-cause analysis нь давтагдах асуудлын жинхэнэ “үндсэн шалтгаан”-ыг олж арилгах шаардлагатай үед тохиромжтой.",
+      book:"Problem analysis нь шинж тэмдгийг системтэй хэлбэрт оруулж шалтгаан-үр дагаврыг харуулдаг; Root-cause analysis нь давтагддаг асуудлыг үндсээр нь шийдэхийн тулд жинхэнэ шалтгаан дээр төвлөрдөг.",
+      bookHint:"Уншаад хэлэх: “Symptom vs Root.”",
+      ex:[
+        "Асуудал: QR удаан гарна (symptom).",
+        "Root: DB/архитектурын bottleneck, кэш, тохиргоо."
+      ]
+    },
 
-        <!-- Q7 -->
-        <article class="card" id="q7">
-          <h2><span class="qnum">7</span> Duration analysis vs Activity-based costing (ABC)</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Харьцуулалт</div>
-              <ul>
-                <li><strong>Duration analysis (Хугацааны шинжилгээ):</strong> аль алхам удаан вэ?</li>
-                <li><strong>ABC (Өртөг суурилсан тооцоо):</strong> аль алхам хамгийн үнэтэй вэ?</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">Time</span>
-                <span class="chip">Cost</span>
-                <span class="chip">Bottleneck</span>
-              </div>
-            </div>
-          </div>
-        </article>
+    {
+      n:7,
+      q:"Duration analysis ба Activity-based costing-ийг харьцуулж тайлбарла.",
+      def:[
+        "Duration analysis: аль алхам хамгийн их хугацаа авч байна вэ?",
+        "Activity-based costing (ABC): аль алхам хамгийн их зардалтай вэ?"
+      ],
+      keys:["Duration","ABC","Time","Cost","Bottleneck"],
+      short:"Duration analysis нь хамгийн удаан (bottleneck) хэсгийг, activity-based costing (ABC) нь хамгийн их өртөгтэй үйл ажиллагааг олж сайжруулалт хийхэд ашиглагдана.",
+      book:"Duration analysis нь bottleneck илрүүлнэ; ABC нь өртөг ихтэй үйл ажиллагааг илрүүлж зардлыг бууруулах шийдэл гаргахад тусалдаг.",
+      bookHint:"Уншаад хэлэх: “Нэг нь цаг, нөгөө нь өртөг.”",
+      ex:[
+        "Duration: төлбөр баталгаажих удаан → webhook сайжруулах.",
+        "ABC: support ticket өртөг өндөр → self-service."
+      ]
+    },
 
-        <!-- Q8 -->
-        <article class="card" id="q8">
-          <h2><span class="qnum">8</span> BPR үед as-is-ийг гүн судлах нь ашигтай юу?</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Гол санаа</div>
-              <ul>
-                <li>BPR нь шинэ санаа/шинэ ажиллах арга руу төвлөрөх хандлагатай.</li>
-                <li>Гэхдээ as-is-ийг <em>хангалттай</em> ойлговол бодит хязгаарлалт/эрсдэлийг алдахгүй.</li>
-                <li>Хэт удаан ухвал “хуучин сэтгэлгээнд баригдах” эрсдэлтэй.</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">BPR focus</span>
-                <span class="chip">Constraints</span>
-                <span class="chip">Risk</span>
-              </div>
-            </div>
-          </div>
-        </article>
+    {
+      n:8,
+      q:"Хэрэв цаг хугацаа болон зардал чухал биш байсан бол BPR төслүүд as-is системийг гүн ойлгоход их цаг зарцуулах нь ашигтай юу? Яагаад?",
+      def:[
+        "As-is-ийг хангалттай ойлгох нь бодит хязгаарлалт/эрсдэлийг илрүүлнэ.",
+        "Гэхдээ BPR нь to-be рүү төвлөрдөг тул as-is-д хэт гацахгүй баланс хэрэгтэй."
+      ],
+      keys:["BPR","As-is depth","Constraints","Innovation","Risk"],
+      short:"BPR дээр as-is-ийг хангалттай судалбал хэрэгжүүлэхэд тулгарах бодит хязгаарлалт/эрсдэлийг олно, гэхдээ хэт их “хуучин” дээр гацвал шинэ to-be дизайныг сааруулж болдог тул баланс хэрэгтэй.",
+      book:"BPR нь эрс өөрчлөлт тул шинэ төлөвийг төсөөлөх нь чухал; гэвч as-is-ийн бодит хязгаарлалтыг мэдэхгүй бол хэрэгжүүлэх эрсдэл өснө, тиймээс ‘хангалттай’ судалгаа ашигтай.",
+      bookHint:"Уншаад хэлэх: “Хэт бага=эрсдэл, хэт их=хуучин сэтгэлгээ.”",
+      ex:[
+        "eSIM: операторын API/хууль зэрэг as-is хязгаарлалтыг мэдэх хэрэгтэй.",
+        "Гэхдээ бүх хуучны алхмыг хуулбарлахгүй — шинэ процесс зохионо."
+      ]
+    },
 
-        <!-- Q9 -->
-        <article class="card" id="q9">
-          <h2><span class="qnum">9</span> Analysis strategy сонгох хүчин зүйлс</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">4 хүчин зүйл</div>
-              <ul>
-                <li>Potential business value (ашгийн боломж)</li>
-                <li>Project cost (өртөг)</li>
-                <li>Breadth of analysis (хамрах хүрээ)</li>
-                <li>Risk (эрсдэл)</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">Value</span>
-                <span class="chip">Cost</span>
-                <span class="chip">Breadth</span>
-                <span class="chip">Risk</span>
-              </div>
-            </div>
-          </div>
-        </article>
+    {
+      n:9,
+      q:"Шинжилгээний тохиромжтой стратегийг сонгоход ямар хүчин зүйлс чухал вэ?",
+      def:[
+        "Potential business value (ашгийн боломж), Project cost (өртөг), Breadth (хамрах хүрээ), Risk (эрсдэл)."
+      ],
+      keys:["Value","Cost","Breadth","Risk","Strategy"],
+      short:"Шинжилгээний стратеги сонголт нь potential business value, project cost, breadth, risk гэсэн 4 хүчин зүйлсийн тэнцвэр дээр үндэслэнэ.",
+      book:"Стратеги сонголт нь ашиг-өртөг-эрсдэл ба хамрах хүрээг тэнцвэржүүлэх асуудал; өндөр эрсдэлтэй, өргөн хүрээтэй төсөлд илүү нягт шинжилгээ шаардлагатай.",
+      bookHint:"Уншаад хэлэх: “Value–Cost–Breadth–Risk.”",
+      ex:[
+        "Value өндөр, risk өндөр бол: илүү гүн analysis + JAD + олон тест.",
+        "Value бага бол: богино analysis, хурдан шийдвэр."
+      ]
+    },
 
-        <!-- Q10 -->
-        <article class="card" id="q10">
-          <h2><span class="qnum">10</span> Interview (Ярилцлага) хийх 5 алхам</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">5 алхам</div>
-              <ul>
-                <li>Select interviewees (хүмүүсээ сонгох)</li>
-                <li>Design questions (асуулт бэлдэх)</li>
-                <li>Prepare (бэлтгэл)</li>
-                <li>Conduct (ярилцлага хийх)</li>
-                <li>Follow-up (баталгаажуулах/тайлан)</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">Stakeholder</span>
-                <span class="chip">Notes</span>
-                <span class="chip">Interview report</span>
-              </div>
-            </div>
-          </div>
-        </article>
+    {
+      n:10,
+      q:"Interview (ярилцлага) хийх 5 үндсэн алхмыг тайлбарла.",
+      def:[
+        "1) Interviewee сонгох 2) Асуулт боловсруулах 3) Бэлтгэх 4) Ярилцлага хийх 5) Follow-up/баталгаажуулах."
+      ],
+      keys:["Interview steps","Select","Questions","Conduct","Follow-up"],
+      short:"Interview нь зөв хүмүүсийг сонгох → зөв асуулт боловсруулах → бэлтгэх → ярилцлага хийх → follow-up хийж баталгаажуулах 5 алхмаар явагддаг.",
+      book:"Ярилцлага нь мэдээлэл цуглуулах түгээмэл арга бөгөөд амжилт нь зөв хүмүүс сонгох, сайн асуулт бэлтгэх, дараа нь тайлан/баталгаажуулалт хийхээс хамаарна.",
+      bookHint:"Уншаад хэлэх: “Select → Design → Prepare → Conduct → Follow-up.”",
+      ex:[
+        "Support, Sales, Admin талуудтай ярилцана.",
+        "Тэмдэглэлээ баталгаажуулж requirements болгоно."
+      ]
+    },
 
-        <!-- Q11 -->
-        <article class="card" id="q11">
-          <h2><span class="qnum">11</span> Closed-ended / Open-ended / Probing question</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Ялгаа</div>
-              <ul>
-                <li><strong>Closed-ended (хаалттай):</strong> сонголт/тийм-үгүй → хурдан, тоон өгөгдөл.</li>
-                <li><strong>Open-ended (нээлттэй):</strong> дэлгэрэнгүй тайлбар → “яагаад/яаж”.</li>
-                <li><strong>Probing (гүнзгийрүүлэх):</strong> өмнөх хариуг нарийвчлах.</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Хэзээ ашиглах вэ?</div>
-              <ul>
-                <li>Closed: хэмжих/тооцох үед</li>
-                <li>Open: ойлголт нээх үед</li>
-                <li>Probing: тодорхойгүй хариуг баталгаажуулах үед</li>
-              </ul>
-            </div>
-          </div>
-        </article>
+    {
+      n:11,
+      q:"Closed-ended question, Open-ended question, Probing question гурвын ялгаа юу вэ? Аль нөхцөлд аль төрлийг ашиглах вэ?",
+      def:[
+        "Closed-ended: сонголт/тийм-үгүй → хурдан, хэмжигдэхүйц.",
+        "Open-ended: дэлгэрэнгүй тайлбар → ойлголт нээх.",
+        "Probing: өмнөх хариуг нарийвчлах/баталгаажуулах."
+      ],
+      keys:["Closed-ended","Open-ended","Probing","When to use"],
+      short:"Closed-ended нь богино хэмжигдэхүйц хариу авахад, open-ended нь дэлгэрэнгүй ойлголт авахад, probing нь тодорхойгүй/дутуу хариуг гүнзгийрүүлэн баталгаажуулахад ашиглагдана.",
+      book:"Асуултын төрөл нь авах мэдээллээс хамаарна: тоон/тод мэдээлэл → хаалттай, ойлголт нээх → нээлттэй, тодруулах → probing.",
+      bookHint:"Уншаад хэлэх: “Closed=quick, Open=insight, Probing=clarify.”",
+      ex:[
+        "Closed: ‘Өдөрт хэдэн захиалга?’",
+        "Open: ‘Яагаад хэрэглэгчид гацдаг вэ?’",
+        "Probing: ‘Яг аль алхам дээр, жишээ хэл?’"
+      ]
+    },
 
-        <!-- Q12 -->
-        <article class="card" id="q12">
-          <h2><span class="qnum">12</span> Unstructured interview vs Structured interview</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Ялгаа</div>
-              <ul>
-                <li><strong>Unstructured (чөлөөт):</strong> сэдвийн хүрээнд уян хатан явна.</li>
-                <li><strong>Structured (бүтэцтэй):</strong> урьдчилан бэлдсэн асуултын багцтай.</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Хэзээ ашиглах вэ?</div>
-              <ul>
-                <li>Unstructured: домэйн ойлгох, шинэ асуудал нээх</li>
-                <li>Structured: олон хүнээс ижил төрлийн мэдээлэл цуглуулах</li>
-              </ul>
-            </div>
-          </div>
-        </article>
+    {
+      n:12,
+      q:"Unstructured interview ба Structured interview-ийн ялгаа юу вэ? Аль аргыг ямар үед ашиглах вэ?",
+      def:[
+        "Unstructured: чөлөөт, уян хатан → домэйн ойлгоход сайн.",
+        "Structured: урьдчилсан асуулттай → олон хүнээс ижил өгөгдөл авахад сайн."
+      ],
+      keys:["Unstructured","Structured","Exploration","Standardization"],
+      short:"Unstructured interview нь шинэ домэйн/асуудлыг нээхэд (exploration) тохиромжтой, structured interview нь олон оролцогчоос нэг стандарт асуултаар харьцуулж хэмжихэд тохиромжтой.",
+      book:"Чөлөөт ярилцлага нь домэйн ойлголт авахад, бүтцтэй ярилцлага нь стандартчилсан өгөгдөл цуглуулахад үр дүнтэй.",
+      bookHint:"Уншаад хэлэх: “Explore vs Standardize.”",
+      ex:[
+        "Эхэнд нь чөлөөт ярилцлага хийж асуудал нээнэ.",
+        "Дараа нь structured-ээр баталгаажуулна."
+      ]
+    },
 
-        <!-- Q13 -->
-        <article class="card" id="q13">
-          <h2><span class="qnum">13</span> Top-down vs Bottom-up ярилцлагын хандлага</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Ялгаа</div>
-              <ul>
-                <li><strong>Top-down:</strong> ерөнхий → нарийн.</li>
-                <li><strong>Bottom-up:</strong> нарийн детал → ерөнхий зураглал.</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Хэзээ?</div>
-              <ul>
-                <li>Top-down: “том зураг” хэрэгтэй үед</li>
-                <li>Bottom-up: бодит алхмуудыг нарийвчлах үед</li>
-              </ul>
-            </div>
-          </div>
-        </article>
+    {
+      n:13,
+      q:"Top-down ба Bottom-up ярилцлагын хандлагын ялгаа юу вэ? Аль хандлагыг ямар үед ашиглах вэ?",
+      def:[
+        "Top-down: ерөнхий (big picture) → нарийн детал.",
+        "Bottom-up: нарийн алхам/детал → ерөнхий зураг."
+      ],
+      keys:["Top-down","Bottom-up","Big picture","Details"],
+      short:"Top-down ярилцлага нь зорилго/ерөнхий процессыг хурдан тодруулдаг бол bottom-up нь бодит алхам, дүрэм, exception-ийг гаргаж ирдэг тул хоёрыг хослуулбал хамгийн зөв.",
+      book:"Top-down нь стратеги/зорилгыг тодруулдаг; bottom-up нь бодит алхам, exception-ийг илрүүлдэг.",
+      bookHint:"Уншаад хэлэх: “Goals → Details, эсвэл Steps → Picture.”",
+      ex:[
+        "Top-down: ‘Системийн гол зорилго?’",
+        "Bottom-up: ‘Checkout яг ямар алхмаар явдаг вэ?’"
+      ]
+    },
 
-        <!-- Q14 -->
-        <article class="card" id="q14">
-          <h2><span class="qnum">14</span> Interview & JAD-д оролцогчдыг хэрхэн сонгодог вэ?</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Гол санаа</div>
-              <ul>
-                <li><strong>Interview:</strong> гол stakeholders (хэрэглэгч, менежер, IT, support) — олон өнцөг.</li>
-                <li><strong>JAD:</strong> шийдвэр гаргах эрх/мэдлэгтэй хүмүүсийг нэг дор цуглуулах + management support.</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">Stakeholders</span>
-                <span class="chip">Decision makers</span>
-                <span class="chip">Management support</span>
-              </div>
-            </div>
-          </div>
-        </article>
+    {
+      n:14,
+      q:"Ярилцлага болон JAD session-д оролцогчдыг хэрхэн сонгодог вэ?",
+      def:[
+        "Interview: олон талын stakeholders-ийг нэг нэгээр сонгоно.",
+        "JAD: мэдлэгтэй + шийдвэр гаргах эрхтэй хүмүүсийг нэг дор цуглуулна."
+      ],
+      keys:["Participants","Stakeholders","JAD","Management support"],
+      short:"Interview-д хэрэглэгч/менежер/IT гэх мэт stakeholders-ийг тус тус сонгож ярилцдаг бол JAD-д шийдвэр гаргах эрхтэй, мэдлэгтэй хүмүүсийг нэг дор цуглуулж хурдан тохиролцоо гаргана.",
+      book:"Зөв оролцогч сонголт нь мэдээллийн чанарт шууд нөлөөлнө: interview нь depth, JAD нь alignment гаргах зорилготой.",
+      bookHint:"Уншаад хэлэх: “Interview=depth, JAD=alignment.”",
+      ex:[
+        "Support (pain), Sales (value), Admin (ops), Dev (constraints) багтана."
+      ]
+    },
 
-        <!-- Q15 -->
-        <article class="card" id="q15">
-          <h2><span class="qnum">15</span> Facts (баримт) vs Opinions (санал бодол)</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Ялгаа</div>
-              <ul>
-                <li><strong>Facts:</strong> тоо/давтамж/хугацаа гэх мэт хэмжигдэхүйц мэдээлэл.</li>
-                <li><strong>Opinions:</strong> сэтгэл ханамж, санал нийлэх/үл нийлэх зэрэг үнэлгээ.</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Яагаад хоёулаа хэрэгтэй?</div>
-              <ul>
-                <li>Facts → “яг юу болж байна?”</li>
-                <li>Opinions → “юуг түрүүлж сайжруулах вэ?”</li>
-              </ul>
-            </div>
-          </div>
-        </article>
+    {
+      n:15,
+      q:"Баримт (facts) ба санал бодлыг (opinions) хэрхэн ялгах вэ? Яагаад хоёулаа хэрэгтэй байдаг вэ?",
+      def:[
+        "Facts: хэмжигдэхүйц бодит өгөгдөл (тоо, хугацаа, давтамж).",
+        "Opinions: үнэлгээ/сэтгэл ханамж/ач холбогдолын ойлголт."
+      ],
+      keys:["Facts","Opinions","Priorities","Evidence"],
+      short:"Facts нь ‘юу болж байна?’ гэдгийг нотолж өгдөг бол opinions нь ‘юу нь хамгийн чухал/яагаад?’ гэдгийг тодруулдаг тул зөв шийдвэр гаргахын тулд хоёулаа хэрэгтэй.",
+      book:"Баримт ба санал бодол нь өөр төрлийн мэдээлэл: баримт нь бодит байдлыг, санал бодол нь ач холбогдол/приоритетыг илэрхийлдэг.",
+      bookHint:"Уншаад хэлэх: “Facts=what, Opinions=so what.”",
+      ex:[
+        "Fact: ‘Өдөрт 200 захиалга.’",
+        "Opinion: ‘Төлбөр дээр хамгийн их гацдаг.’"
+      ]
+    },
 
-        <!-- Q16 -->
-        <article class="card" id="q16">
-          <h2><span class="qnum">16</span> JAD session (Хамтарсан уулзалт) хийх 5 алхам</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">5 алхам (товч)</div>
-              <ul>
-                <li>1) Select participants (оролцогч сонгох)</li>
-                <li>2) Prepare (agenda, материал)</li>
-                <li>3) Conduct (session явуулах)</li>
-                <li>4) Document (шийдвэр/шаардлага тэмдэглэх)</li>
-                <li>5) Follow-up (post-session report)</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">Workshop</span>
-                <span class="chip">Facilitator</span>
-                <span class="chip">Consensus</span>
-              </div>
-            </div>
-          </div>
-        </article>
+    {
+      n:16,
+      q:"JAD session явуулах 5 үндсэн алхмыг тайлбарла.",
+      def:[
+        "1) Participants сонгох 2) Prepare (agenda) 3) Conduct session 4) Document decisions 5) Follow-up report."
+      ],
+      keys:["JAD steps","Workshop","Agenda","Consensus","Report"],
+      short:"JAD session нь оролцогч сонгох → бэлтгэх (agenda/material) → session явуулах → шийдвэр/шаардлагаа баримтжуулах → follow-up report-оор баталгаажуулах 5 алхамтай.",
+      book:"JAD нь бүлгийн workshop хэлбэрээр шаардлагыг хурдан нэгтгэдэг; амжилтын үндэс нь сайн бэлтгэл, сайн хөтлөлт, сайн баримтжуулалт.",
+      bookHint:"Уншаад хэлэх: “Prepare сайн бол JAD амжилттай.”",
+      ex:[
+        "Payment flow, QR delivery, security зэрэг асуудлыг нэг дор тохиролцоно."
+      ]
+    },
 
-        <!-- Q17 -->
-        <article class="card" id="q17">
-          <h2><span class="qnum">17</span> JAD Facilitator (Хөтлөгч) vs Scribe (Тэмдэглэгч)</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Үүрэг</div>
-              <ul>
-                <li><strong>Facilitator:</strong> хэлэлцүүлгийг удирдаж, цаг/явцыг барина.</li>
-                <li><strong>Scribe:</strong> шийдвэр, шаардлага, тэмдэглэлийг бүртгэнэ.</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">Moderate</span>
-                <span class="chip">Notes</span>
-                <span class="chip">Report</span>
-              </div>
-            </div>
-          </div>
-        </article>
+    {
+      n:17,
+      q:"JAD facilitator ба Scribe хоёрын үүргийн ялгаа юу вэ?",
+      def:[
+        "Facilitator: хэлэлцүүлгийг удирдаж, цаг/явцыг барина.",
+        "Scribe: шийдвэр, шаардлага, тэмдэглэлийг бүртгэнэ."
+      ],
+      keys:["Facilitator","Scribe","Moderation","Documentation"],
+      short:"Facilitator нь хэлэлцүүлгийг зөв чиглүүлж удирддаг, харин scribe нь ярилцсан шийдвэр ба шаардлагыг алдахгүйгээр бичиж баримтжуулдаг.",
+      book:"JAD-д роль чухал: нэг нь процесс удирдана, нөгөө нь баримтжуулна.",
+      bookHint:"Уншаад хэлэх: “Хөтлөгч удирдана, бичээч тэмдэглэнэ.”",
+      ex:[
+        "Facilitator: topic-оо барина; Scribe: requirements-ийг дугаарлаж бичнэ."
+      ]
+    },
 
-        <!-- Q18 -->
-        <article class="card" id="q18">
-          <h2><span class="qnum">18</span> Facilitator-ийн 3 үндсэн ажил</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">3 ажил</div>
-              <ul>
-                <li>Process management (явц/agenda/цаг)</li>
-                <li>Content management (асуудал дээр төвлөрүүлэх)</li>
-                <li>Group dynamics (оролцооны тэнцвэр, маргаан зохицуулах)</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">Schedule</span>
-                <span class="chip">Conflict</span>
-                <span class="chip">Engagement</span>
-              </div>
-            </div>
-          </div>
-        </article>
+    {
+      n:18,
+      q:"JAD session явуулахад facilitator-ийн гүйцэтгэдэг 3 үндсэн ажил юу вэ?",
+      def:[
+        "Process management: agenda/цаг/дүрэм барих.",
+        "Content management: зорилгоос гажихгүй барих.",
+        "Group dynamics: оролцоо тэнцвэржүүлэх, маргаан зохицуулах."
+      ],
+      keys:["Process","Content","Group dynamics","Timeboxing"],
+      short:"Facilitator нь (1) явцыг/цагаа барих (process), (2) сэдвийг зөв чиглүүлэх (content), (3) багийн харилцааг зохицуулах (group dynamics) гэсэн 3 үндсэн ажлыг хийдэг.",
+      book:"Facilitator нь цаг барих, зөв сэдэв дээр тогтоох, бүх талын оролцоог хангах үүрэгтэй.",
+      bookHint:"Уншаад хэлэх: “Process–Content–People.”",
+      ex:[
+        "Timeboxing хийж сунжруулахгүй; бүх хүнээс санал авна."
+      ]
+    },
 
-        <!-- Q19 -->
-        <article class="card" id="q19">
-          <h2><span class="qnum">19</span> e-JAD (Цахим JAD) гэж юу вэ? Яагаад ашигладаг вэ?</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Тодорхойлолт</div>
-              <ul>
-                <li><strong>e-JAD:</strong> онлайн хэрэгсэл/хамтын платформ ашиглан JAD-г явуулах.</li>
-                <li>Шалтгаан: хурдан нийцэл, distributed team, зэрэг input, хурдан баримтжуулалт.</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">Online workshop</span>
-                <span class="chip">Collaboration</span>
-                <span class="chip">Speed</span>
-              </div>
-            </div>
-          </div>
-        </article>
+    {
+      n:19,
+      q:"e-JAD гэж юу вэ? Байгууллага яагаад үүнийг ашиглах сонирхолтой байдаг вэ?",
+      def:[
+        "e-JAD: онлайн/хамтын платформоор JAD-ыг явуулах хэлбэр.",
+        "Алсын баг, хурдан баримтжуулалт, зардал бууруулах давуу талтай."
+      ],
+      keys:["e-JAD","Online","Collaboration","Distributed teams"],
+      short:"e-JAD нь JAD-ыг онлайн орчинд явуулах хэлбэр бөгөөд байгууллагад зайнаас олон stakeholder оролцуулах, цаг/зардал хэмнэх, баримтжуулалтыг хурдан хийх давуу тал өгдөг.",
+      book:"e-JAD нь зайнаас хамтран шаардлага тодорхойлох боломж олгодог; цаг/зардал бууруулах, оролцоог өргөжүүлэхэд ашигтай.",
+      bookHint:"Уншаад хэлэх: “Online JAD = хурдан + өргөн оролцоо.”",
+      ex:[
+        "Meet + shared doc ашиглаад realtime requirements бичнэ."
+      ]
+    },
 
-        <!-- Q20 -->
-        <article class="card" id="q20">
-          <h2><span class="qnum">20</span> Questionnaire (Асуулга) — Interview/JAD-аас юугаараа өөр вэ?</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Гол ялгаа</div>
-              <ul>
-                <li>Асуулгыг явуулсны дараа analyst “тодруулах” боломжгүй → wording маш тодорхой байх ёстой.</li>
-                <li>Ихэвчлэн closed-ended давамгай → дүн шинжилгээ хийхэд амар.</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">Clarity</span>
-                <span class="chip">Scale</span>
-                <span class="chip">Standardization</span>
-              </div>
-            </div>
-          </div>
-        </article>
+    {
+      n:20,
+      q:"Questionnaire-ийн асуулт боловсруулах нь interview эсвэл JAD-ын асуулт боловсруулахтай юугаараа ялгаатай вэ?",
+      def:[
+        "Questionnaire дээр analyst шууд тайлбарлаж/өөрчилж асуух боломжгүй.",
+        "Wording маш тодорхой, ихэвчлэн closed-ended давамгай."
+      ],
+      keys:["Questionnaire","Clarity","No follow-up","Closed-ended"],
+      short:"Questionnaire-д тодруулах follow-up боломж бага тул асуултыг маш тодорхой (self-explanatory) бичдэг; харин interview/JAD дээр асуултаа явцад нь тайлбарлаж гүнзгийрүүлэх боломжтой.",
+      book:"Асуулга нь өөрөө тайлбарлагдахуйц байх ёстой; ярилцлага/JAD дээр тодруулах асуулт асууж болдог.",
+      bookHint:"Уншаад хэлэх: “Survey дээр буруу бичвэл засах боломжгүй.”",
+      ex:[
+        "Survey: ‘Ойлгомжтой юу? 1–5’",
+        "Interview: ‘Яагаад ойлгомжгүй байсан бэ?’"
+      ]
+    },
 
-        <!-- Q21 -->
-        <article class="card" id="q21">
-          <h2><span class="qnum">21</span> Questionnaire response rate (Хариу өгөх хувь) + нэмэгдүүлэх арга</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Ерөнхий тоо</div>
-              <ul>
-                <li>Paper/Email: ~30–50%</li>
-                <li>Web: ~5–30%</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Нэмэгдүүлэх</div>
-              <ul>
-                <li>Reminder (сануулах)</li>
-                <li>Incentive (урамшуулал)</li>
-                <li>Deadline + ач холбогдлыг тайлбарлах</li>
-              </ul>
-            </div>
-          </div>
-        </article>
+    {
+      n:21,
+      q:"Questionnaire-ийн хариу өгөх дундаж хувь хэд байдаг вэ? Үүнийг хэрхэн нэмэгдүүлэх вэ?",
+      def:[
+        "Ерөнхий: paper/email ~30–50%, web ~5–30% (ойролцоогоор).",
+        "Нэмэгдүүлэх: reminder, incentive, deadline, богино/ойлгомжтой болгох."
+      ],
+      keys:["Response rate","Reminders","Incentives","Deadline"],
+      short:"Асуулгын хариу өгөх хувь нь ихэвчлэн дунджаар бага байдаг тул богино, ойлгомжтой асуулга + сануулга (reminder) + жижиг урамшуулал (incentive) + тодорхой хугацаа (deadline) нь response rate-ийг нэмэгдүүлдэг.",
+      book:"Response rate нь сувгаас хамаарч өөр; нэмэхийн тулд богино/ойлгомжтой асуулга, хугацаа, сануулга, урамшуулал ашигладаг.",
+      bookHint:"Уншаад хэлэх: “Short + reminder хамгийн үр дүнтэй.”",
+      ex:[
+        "2 удаа reminder явуулах; 1–2 минут бөглөхөөр богино болгох."
+      ]
+    },
 
-        <!-- Q22 -->
-        <article class="card" id="q22">
-          <h2><span class="qnum">22</span> Document analysis (Баримт бичгийн шинжилгээ) гэж юу вэ?</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Тодорхойлолт</div>
-              <ul>
-                <li>Дүрэм, журам, маягт, тайлан, гарын авлага зэрэг баримтуудыг шалгаж мэдээлэл цуглуулах арга.</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">Policies</span>
-                <span class="chip">Forms</span>
-                <span class="chip">Reports</span>
-              </div>
-            </div>
-          </div>
-        </article>
+    {
+      n:22,
+      q:"Document analysis гэж юу вэ?",
+      def:[
+        "Баримт бичиг (policy, form, report, manual)-ийг шинжилж мэдээлэл цуглуулах арга.",
+        "Албан ёсны процесс ба дүрэм журмыг ойлгоход сайн."
+      ],
+      keys:["Document analysis","Policies","Forms","Reports","Manuals"],
+      short:"Document analysis нь байгууллагын баримт бичгүүд (policy/form/report/manual)-ээс нотолгоонд суурилсан мэдээлэл цуглуулж, албан ёсны процесс ба дүрмийг тодруулах арга юм.",
+      book:"Document analysis нь одоогийн системийн албан ёсны баримт бичгүүдээр процесс, өгөгдөл, дүрмийг тодруулдаг; бусад аргуудтай хослуулахад сайн.",
+      bookHint:"Уншаад хэлэх: “Баримтаас fact авна.”",
+      ex:[
+        "RFP, журам, form, тайлан, зааврыг шалгаж requirements баталгаажуулна."
+      ]
+    },
 
-        <!-- Q23 -->
-        <article class="card" id="q23">
-          <h2><span class="qnum">23</span> Formal system vs Informal system + document analysis</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Ялгаа</div>
-              <ul>
-                <li><strong>Formal (албан ёсны):</strong> бичиг баримтад заасан “ёстой” процесс.</li>
-                <li><strong>Informal (албан бус):</strong> бодит амьдрал дээр хүмүүсийн “үнэндээ” хийдэг процесс.</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Document analysis яаж тусалдаг вэ?</div>
-              <ul>
-                <li>Formal-г баримтаас ойлгоно</li>
-                <li>Зөрүү гарвал interview/observation-оор informal-г баталгаажуулна</li>
-              </ul>
-            </div>
-          </div>
-        </article>
+    {
+      n:23,
+      q:"Formal system ба Informal system-ийн ялгаа юу вэ? Document analysis эдгээрийг ойлгоход хэрхэн тусалдаг вэ?",
+      def:[
+        "Formal: байгууллагын албан ёсны дүрэм/журам дээрх процесс.",
+        "Informal: хүмүүсийн бодит амьдрал дээр хийдэг бодит процесс."
+      ],
+      keys:["Formal","Informal","Reality gap","Documentation"],
+      short:"Formal system нь баримт/журам дээрх ‘ёстой’ процесс, informal system нь бодит ажил дээрх ‘үнэндээ’ процесс бөгөөд document analysis нь formal-г тодруулж, бусад аргуудтай хамт informal-тэй зөрүү (gap)-г илрүүлэхэд тусалдаг.",
+      book:"Баримтууд formal системийг сайн харуулдаг; informal-ийг илрүүлэхэд ярилцлага/ажиглалт хэрэгтэй бөгөөд зөрүү нь сайжруулалтын боломж болдог.",
+      bookHint:"Уншаад хэлэх: “Paper vs Reality.”",
+      ex:[
+        "Formal: 24 цагт QR илгээнэ; Informal: 2–3 өдөр хойшлох."
+      ]
+    },
 
-        <!-- Q24 -->
-        <article class="card" id="q24">
-          <h2><span class="qnum">24</span> Observation (Ажиглалт) ашиглахын гол талууд</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Гол санаа</div>
-              <ul>
-                <li>Бодит ажлын урсгалыг “хийж байгаагаар нь” харах.</li>
-                <li>Давуу тал: informal процесс, жижиг алхам/shortcut-ууд илрүүлнэ.</li>
-                <li>Анхаарах: саад болохгүй, зан өөрчлөгдөх эрсдэлтэй.</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">Reality</span>
-                <span class="chip">Workflow</span>
-                <span class="chip">Non-intrusive</span>
-              </div>
-            </div>
-          </div>
-        </article>
+    {
+      n:24,
+      q:"Мэдээлэл цуглуулахад observation ашиглахын гол талууд юу вэ?",
+      def:[
+        "Бодит процессыг хийж байгаагаар нь шууд харна.",
+        "Informal shortcut, жижиг алхам, exception-ийг илрүүлэхэд сайн."
+      ],
+      keys:["Observation","Workflow","Informal","Reality","Observer effect"],
+      short:"Observation нь хүмүүсийн бодит ажлын урсгалыг шууд ажиглаж, informal алхам/shortcut болон бодит bottleneck-ийг илрүүлэх давуу талтай (гэхдээ ажиглагдаж буй хүн зангаа өөрчилж магадгүй).",
+      book:"Observation нь ‘хийж байгааг’ харах арга тул бодит урсгал, гацалт, алдаа гардаг цэгийг илүү сайн илрүүлдэг; observer effect байж болно.",
+      bookHint:"Уншаад хэлэх: “Яриа биш — бодит үйлдлийг харна.”",
+      ex:[
+        "Support хүн QR явуулахдаа хаана copy/paste хийдгийг ажиглах."
+      ]
+    },
 
-        <!-- Q25 -->
-        <article class="card" id="q25">
-          <h2><span class="qnum">25</span> Мэдээлэл цуглуулах аргыг сонгох хүчин зүйлс</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Хүчин зүйлс</div>
-              <ul>
-                <li>Type of info (баримт/санал бодол)</li>
-                <li>Depth (гүн)</li>
-                <li>Breadth (өргөн хүрээ)</li>
-                <li>User involvement (оролцоо)</li>
-                <li>Cost (зардал)</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">Depth</span>
-                <span class="chip">Breadth</span>
-                <span class="chip">Cost</span>
-                <span class="chip">Users</span>
-              </div>
-            </div>
-          </div>
-        </article>
+    {
+      n:25,
+      q:"Мэдээлэл цуглуулах аргыг сонгоход ашиглах хүчин зүйлсийг тайлбарла.",
+      def:[
+        "Type of information (facts vs opinions), Depth, Breadth, Integration.",
+        "User involvement, Cost, Analysts’ experience."
+      ],
+      keys:["Type","Depth","Breadth","Cost","Integration"],
+      short:"Мэдээлэл цуглуулах арга сонголт нь авах мэдээллийн төрөл (facts/opinions), шаардлагатай depth vs breadth, зардал/цаг, хэрэглэгчийн оролцоо, мөн аргуудыг хослуулах боломж (integration)-оос хамаарна.",
+      book:"Арга сонгох нь мэдээллийн төрөл, гүн/өргөн, төсөв, хэрэглэгчийн оролцоо зэргээс хамаарна; аргуудыг хослуулах нь илүү найдвартай.",
+      bookHint:"Уншаад хэлэх: “Goal → Method.”",
+      ex:[
+        "Breadth хэрэгтэй бол survey; depth хэрэгтэй бол interview/observation."
+      ]
+    },
 
-        <!-- Q26 -->
-        <article class="card" id="q26">
-          <h2><span class="qnum">26</span> Concept map (Ойлголтын зураглал) — текст баримтаас давуу тал</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Давуу тал</div>
-              <ul>
-                <li>Шаардлагуудын <strong>хоорондын холбоо</strong>-г нэг зураг дээр харуулна.</li>
-                <li>“Юу юутай хамаатай вэ?” гэдгийг хурдан ойлгуулна.</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">Relationships</span>
-                <span class="chip">Visualization</span>
-                <span class="chip">Big picture</span>
-              </div>
-            </div>
-          </div>
-        </article>
+    {
+      n:26,
+      q:"Concept map нь уламжлалт текстэн шаардлагын баримт бичгээс ямар давуу талтай вэ?",
+      def:[
+        "Шаардлагуудын хоорондын холбоог нэг зураг дээр харуулна.",
+        "Ойлголцлыг хурдан болгоно; big picture илүү тод."
+      ],
+      keys:["Concept map","Relationships","Visualization","Big picture"],
+      short:"Concept map нь текстэн жагсаалтаас илүүгээр шаардлагуудын холбоо (relationships)-г нэг зураг дээр үзүүлдэг тул баг хурдан ойлголцож, давхардал/алгассан холбоог амархан илрүүлдэг.",
+      book:"Concept map нь шаардлагуудын сүлжээ холбоог харуулдаг тул ойлголцол хурдан, алдаа илрүүлэхэд хялбар.",
+      bookHint:"Уншаад хэлэх: “Visual = fast alignment.”",
+      ex:[
+        "Payment ↔ Order ↔ Invoice ↔ Notification холбоог зураглана."
+      ]
+    },
 
-        <!-- Q27 -->
-        <article class="card" id="q27">
-          <h2><span class="qnum">27</span> Story cards (Түүхийн карт) & Task lists (Ажлын жагсаалт) давуу тал</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Давуу тал</div>
-              <ul>
-                <li>Нэг card = нэг requirement → ойлгомжтой, жижиглэхэд амар.</li>
-                <li>Task list → хэрэгжүүлэх ажлууд тодорхой болно.</li>
-                <li>Уян хатан: өөрчлөлтөд хурдан дасан зохицно.</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">Agile</span>
-                <span class="chip">Portable</span>
-                <span class="chip">Easy updates</span>
-              </div>
-            </div>
-          </div>
-        </article>
+    {
+      n:27,
+      q:"Story cards болон Task lists ашиглахын давуу талууд юу вэ?",
+      def:[
+        "Story card = нэг шаардлага → жижиглэх, өөрчлөхөд амар.",
+        "Task list = хэрэгжүүлэх ажлыг тодорхой болгож, явцыг хянахад тусална."
+      ],
+      keys:["Story cards","Task list","Agile","Portable","Easy updates"],
+      short:"Story cards нь шаардлагыг жижиг нэгж болгон уян хатан удирдах боломж өгдөг бол task lists нь тэр шаардлагыг хэрэгжүүлэх ажлуудыг тодорхой болгож, хуваарилалт ба явцын хяналтыг хялбар болгодог.",
+      book:"Story card нь шаардлагыг карт хэлбэрээр дүрслэж багийн ажлыг хурдан болгодог; task list нь бодит ажлуудыг тодорхойлж төлөвлөлт/туршилтыг дэмждэг.",
+      bookHint:"Уншаад хэлэх: “Story=what, Task=how.”",
+      ex:[
+        "Story: ‘User QR авах’ → Tasks: webhook, QR render, email send, test."
+      ]
+    },
 
-        <!-- Q28 -->
-        <article class="card" id="q28">
-          <h2><span class="qnum">28</span> System proposal (Системийн санал)-д ямар мэдээлэл багтдаг вэ?</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Ерөнхий бүтэц</div>
-              <ul>
-                <li>Executive summary</li>
-                <li>System request</li>
-                <li>Workplan</li>
-                <li>Feasibility analysis</li>
-                <li>Requirements definition</li>
-                <li>Models + Appendices</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">Feasibility</span>
-                <span class="chip">Plan</span>
-                <span class="chip">Requirements</span>
-                <span class="chip">Models</span>
-              </div>
-            </div>
-          </div>
-        </article>
+    {
+      n:28,
+      q:"System proposal-д ихэвчлэн ямар мэдээлэл багтдаг вэ?",
+      def:[
+        "Executive summary, System request, Workplan, Feasibility analysis, Requirements definition.",
+        "Models (functional/structural/behavioral) + appendices."
+      ],
+      keys:["System proposal","Executive summary","Feasibility","Workplan","Models"],
+      short:"System proposal нь planning+analysis үеийн гол материалууд болох executive summary, system request, workplan, feasibility, requirements, models-ийг нэгтгэсэн шийдвэрийн баримт юм.",
+      book:"System proposal нь planning+analysis үеийн материалуудыг нэг документ болгон нэгтгэж, удирдлага/стейкхолдерт шийдвэр гаргахад ашигладаг.",
+      bookHint:"Уншаад хэлэх: “Proposal = decision document.”",
+      ex:[
+        "eSIM proposal: хүрээ, шаардлага, диаграм, хугацаа/зардал, эрсдэл."
+      ]
+    },
 
-        <!-- Q29 -->
-        <article class="card" id="q29">
-          <h2><span class="qnum">29</span> Executive summary (Гүйцэтгэх хураангуй)-ийн зорилго</h2>
-          <div class="row">
-            <div class="block">
-              <div class="label">Зорилго</div>
-              <ul>
-                <li>Завгүй удирдлагад proposal-ын <strong>хамгийн чухал</strong> хэсгийг хурдан ойлгуулах.</li>
-                <li>“Approve / revise / reject” шийдвэрт туслах.</li>
-              </ul>
-            </div>
-            <div class="block">
-              <div class="label">Түлхүүр үг</div>
-              <div class="chips">
-                <span class="chip">Decision support</span>
-                <span class="chip">High-level</span>
-                <span class="chip">Summary</span>
-              </div>
-            </div>
-          </div>
-        </article>
+    {
+      n:29,
+      q:"System proposal-ын Executive summary-ийн зорилго юу вэ?",
+      def:[
+        "Proposal-ын хамгийн чухал мэдээллийг өндөр түвшинд товчлоно.",
+        "Approve/Revise/Reject шийдвэр гаргахад тусална."
+      ],
+      keys:["Executive summary","Decision support","High-level","Approve/revise/reject"],
+      short:"Executive summary нь удирдлагад зориулж proposal-ын гол зорилго, ашиг, өртөг, эрсдэл, санал болгож буй шийдлийг хамгийн товч өндөр түвшинд өгч шийдвэр гаргалтыг дэмждэг.",
+      book:"Executive summary нь proposal-ын хамгийн их уншигддаг хэсэг бөгөөд шийдвэр гаргалтыг дэмжихийн тулд гол мэдээллийг товч өгдөг.",
+      bookHint:"Уншаад хэлэх: “Busy manager-д зориулсан 1-page санаа.”",
+      ex:[
+        "eSIM: ‘онлайн төлбөр + автомат QR’ → хугацаа/зардал буурна."
+      ]
+    },
+  ];
 
-        <div class="footer">
-          ✅ Хэрвээ хүсвэл би энэ вэб хуудсыг “төрөлжүүлээд”: <br/>
-          • өөрийн жишээ системийн нэр/логогоор <br/>
-          • RFP → Requirements mapping хүснэгттэй <br/>
-          • Use case test checklist хэсэгтэй болгож өгч болно.
-        </div>
-      </section>
-    </div>
-  </main>
+  const content = document.getElementById("content");
+  const toc = document.getElementById("toc");
+
+  function makeCard(item){
+    const id = "q" + item.n;
+
+    const card = document.createElement("article");
+    card.className = "card";
+    card.id = id;
+
+    const h2 = document.createElement("h2");
+    h2.innerHTML = `<span class="qnum">${item.n}</span> ${item.q}`;
+    card.appendChild(h2);
+
+    const row = document.createElement("div");
+    row.className = "row";
+
+    const left = document.createElement("div");
+    left.className = "block";
+    left.innerHTML = `<div class="label">Тодорхойлолт</div>`;
+    const ul = document.createElement("ul");
+    item.def.forEach(t => {
+      const li = document.createElement("li");
+      li.textContent = t;
+      ul.appendChild(li);
+    });
+    left.appendChild(ul);
+
+    const right = document.createElement("div");
+    right.className = "block";
+    right.innerHTML = `<div class="label">Түлхүүр үг</div>`;
+    const chips = document.createElement("div");
+    chips.className = "chips";
+    item.keys.forEach(k => {
+      const s = document.createElement("span");
+      s.className = "chip";
+      s.textContent = k;
+      chips.appendChild(s);
+    });
+    right.appendChild(chips);
+
+    row.appendChild(left);
+    row.appendChild(right);
+    card.appendChild(row);
+
+    // ✅ NEW: brief answer text (between definition and example)
+    const brief = document.createElement("div");
+    brief.className = "briefAnswer";
+    brief.innerHTML = `<b>Товч хариулт:</b> ${item.short}`;
+    card.appendChild(brief);
+
+    // Example details (existing structure kept)
+    const details = document.createElement("details");
+    const summary = document.createElement("summary");
+    summary.textContent = "Жишээ";
+    details.appendChild(summary);
+
+    // Book definition inside example
+    const book = document.createElement("div");
+    book.className = "bookNote";
+    book.innerHTML = `
+      <p><b>Номоос (summary):</b> ${item.book}</p>
+      <p class="small">💡 ${item.bookHint || ""}</p>
+    `;
+    details.appendChild(book);
+
+    // Example text
+    const ex = document.createElement("div");
+    ex.className = "ex";
+    ex.innerHTML = `<b>${exampleSystemName} жишээ:</b><br/>` + item.ex.map(x => "• " + x).join("<br/>");
+    details.appendChild(ex);
+
+    card.appendChild(details);
+    return card;
+  }
+
+  function makeToc(item){
+    const a = document.createElement("a");
+    a.href = "#q" + item.n;
+    a.textContent = item.n + ". " + item.q.replace(/\(.+?\)/g, "").slice(0, 44) + (item.q.length > 44 ? "…" : "");
+    return a;
+  }
+
+  // Build
+  data.sort((a,b)=>a.n-b.n);
+  data.forEach(item => {
+    content.appendChild(makeCard(item));
+    toc.appendChild(makeToc(item));
+  });
+
+  // Navigation
+  const counter = document.getElementById("counter");
+  const prevBtn = document.getElementById("prev");
+  const nextBtn = document.getElementById("next");
+
+  const cards = () => Array.from(document.querySelectorAll(".card"));
+  let idx = 0;
+
+  function updateCounter(){
+    const total = 29;
+    const current = cards()[idx]?.id?.replace("q","") || "1";
+    counter.textContent = `${current} / ${total}`;
+  }
+
+  function go(delta){
+    const arr = cards();
+    idx = Math.max(0, Math.min(arr.length - 1, idx + delta));
+    arr[idx].scrollIntoView({behavior:"smooth", block:"start"});
+    updateCounter();
+  }
+
+  prevBtn.addEventListener("click", () => go(-1));
+  nextBtn.addEventListener("click", () => go(1));
+  window.addEventListener("keydown", (e)=>{
+    if(e.key === "ArrowRight") go(1);
+    if(e.key === "ArrowLeft") go(-1);
+  });
+
+  // update counter on scroll
+  const obs = new IntersectionObserver((entries)=>{
+    const visible = entries.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];
+    if(!visible) return;
+    const id = visible.target.id;
+    const arr = cards();
+    const newIdx = arr.findIndex(c=>c.id===id);
+    if(newIdx >= 0){ idx = newIdx; updateCounter(); }
+  }, {threshold:[0.25,0.5,0.75]});
+  cards().forEach(c=>obs.observe(c));
+
+  updateCounter();
+</script>
 </body>
 </html>
