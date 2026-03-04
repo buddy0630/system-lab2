@@ -55,6 +55,18 @@
     .sub{margin:6px 0 0; color:var(--muted); font-size:13px; line-height:1.6}
 
     .navBtns{display:flex; gap:8px; align-items:center}
+    .routeBtn{
+      text-decoration:none;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 8px 11px;
+      border-radius: 12px;
+      font-weight:700;
+      font-size:12px;
+      display:inline-block;
+    }
+    .routeBtn:hover{border-color: rgba(106,166,255,.45); background: rgba(106,166,255,.12)}
     button{
       cursor:pointer;
       border:1px solid rgba(255,255,255,.14);
@@ -220,7 +232,6 @@
       margin-bottom:10px;
     }
     .bookNote p{margin:0; color: var(--text); line-height:1.65; font-size:13px}
-    .bookNote .small{margin-top:6px; color: var(--muted); font-size:12px}
 
     .ex{
       color: var(--muted);
@@ -247,6 +258,7 @@
       </div>
       <div class="navBtns">
         <span class="counter" id="counter">1 / 29</span>
+        <a class="routeBtn" href="part2.html">Part 2</a>
         <button id="prev" type="button">Prev</button>
         <button id="next" type="button">Next</button>
       </div>
@@ -265,13 +277,7 @@
     <aside class="side">
       <h3>📌 TOC (Агуулга)</h3>
       <div class="toc" id="toc"></div>
-      <div class="hint">
-        <strong>Лаб 2 сануулга:</strong><br/>
-        • Жишээ систем авна<br/>
-        • SDLC-д цуглуулсан шаардлагыг оруулна<br/>
-        • Use-case-ийг туршиж шалгана<br/>
-        • RFP ↔ Requirements нийцүүлнэ
-      </div>
+      
     </aside>
 
     <section class="content" id="content"></section>
@@ -293,7 +299,6 @@
       keys:["Requirements definition","Models","System proposal","Walkthrough"],
       short:"Шинжилгээний гол гарц нь requirements definition (шаардлагын тодорхойлолт) ба models (загварууд); харин тэдгээрийг feasibility/workplan-тай нэгтгэсэн эцсийн баримт нь system proposal (системийн санал) юм.",
       book:"Analysis үе шат нь planning үеийн ерөнхий санааг (system request) нарийвчилж requirements болон models болгон боловсруулдаг; эдгээрийг feasibility/workplan зэрэгтэй нэгтгээд system proposal болгон шийдвэр гаргахад ашигладаг.",
-      bookHint:"Уншаад хэлэх: “Deliverables → proposal-д нэгтгэнэ.”",
       ex:[
         "Requirements: Plan харах/сонгох, Order үүсгэх, Payment баталгаажуулах, QR авах.",
         "Models: Use case + diagram-уудаар урсгалыг баталгаажуулна.",
@@ -310,7 +315,6 @@
       keys:["As-is","To-be","Current state","Future state","Gap"],
       short:"As-is system нь өнөөдөр ажиллаж буй бодит төлөв, харин To-be system нь сайжруулалтын дараах хүсэж буй ирээдүйн төлөв бөгөөд энэ хоёрын зөрүү (gap) дээр суурилж шаардлага гарна.",
       book:"Шинжилгээнд одоогийн байдлыг (as-is) ойлгоод сайжруулалтын боломжийг тодорхойлж, дараа нь зорилтот шинэ байдлын (to-be) шаардлагыг тогтоодог; As-is → To-be шилжилтийг gap гэж үзэж болно.",
-      bookHint:"Уншаад хэлэх: “As-is бол одоо, To-be бол дараа.”",
       ex:[
         "As-is: төлбөр хийсний дараа support гараар QR явуулдаг.",
         "To-be: төлбөр баталгаажмагц систем автоматаар QR/activation илгээнэ."
@@ -326,7 +330,6 @@
       keys:["Scope","Functional","Nonfunctional","Baseline","Agreement"],
       short:"Requirements definition нь системийн scope (хамрах хүрээ)-д багтах functional (юу хийх) ба nonfunctional (ямар чанартай) шаардлагыг нэгтгэн тогтоож, дараагийн загварчлал/дизайны суурь баримт болдог.",
       book:"Requirements definition нь системийн scope-д багтах шаардлагуудын албан ёсны жагсаалт бөгөөд functional болон nonfunctional гэж ангилна; энэ нь analysis models болон design-ийг чиглүүлдэг.",
-      bookHint:"Уншаад хэлэх: “Build хийх зүйлээ нэг мөр болгоно.”",
       ex:[
         "Functional: Plan харах → Order → Payment → QR авах.",
         "Nonfunctional: Security, Performance, Availability."
@@ -343,7 +346,6 @@
       keys:["3 steps","As-is","Improvements","To-be","Time pressure"],
       short:"Шинжилгээ нь as-is (одоог) ойлгох → сайжруулалт (improvements) олох → to-be шаардлага боловсруулах 3 алхамтай бөгөөд шинээр “0-оос” бүтээгдэхүүн хийх үед as-is алхам богино байж болно.",
       book:"Шинжилгээ ихэвчлэн 3 алхамтай явна: одоог ойлгох → сайжруулах боломж олох → шинэ шаардлага гаргах; шинэ системийг 0-оос эхлүүлэх үед as-is алхам богино байх боломжтой.",
-      bookHint:"Уншаад хэлэх: “As-is → Improve → To-be.”",
       ex:[
         "Шинэ eSIM marketplace эхэлж байвал as-is бага.",
         "Одоо байгаа процесс байвал as-is-ийг гүн судална."
@@ -361,7 +363,6 @@
       keys:["BPA","BPI","BPR","Automation","Radical change"],
       short:"BPA нь одоогийн процессыг автоматаар хурдан болгох, BPI нь процессыг сайжруулж үр ашгийг нэмэх, харин BPR нь процессыг үндсээр нь дахин зохиож (radical change) хамгийн том өөрчлөлт хийх зорилготой.",
       book:"Процессын өөрчлөлтийн хэмжээгээр ялгана: BPA бага өөрчлөлттэй, BPI сайжруулалт, BPR эрс шинэчлэлт бөгөөд үр ашиг их ч эрсдэл өндөр байж болно.",
-      bookHint:"Уншаад хэлэх: “BPA < BPI < BPR (өөрчлөлтийн хэмжээ өснө).”",
       ex:[
         "BPA: invoice автомат үүсгэнэ.",
         "BPI: checkout алхмыг цөөлнө.",
@@ -379,7 +380,6 @@
       keys:["Problem analysis","Root cause","Symptom","Five whys"],
       short:"Problem analysis нь шинж тэмдэг (symptom)-ийг зураглаж ойлгоход, root-cause analysis нь давтагдах асуудлын жинхэнэ “үндсэн шалтгаан”-ыг олж арилгах шаардлагатай үед тохиромжтой.",
       book:"Problem analysis нь шинж тэмдгийг системтэй хэлбэрт оруулж шалтгаан-үр дагаврыг харуулдаг; Root-cause analysis нь давтагддаг асуудлыг үндсээр нь шийдэхийн тулд жинхэнэ шалтгаан дээр төвлөрдөг.",
-      bookHint:"Уншаад хэлэх: “Symptom vs Root.”",
       ex:[
         "Асуудал: QR удаан гарна (symptom).",
         "Root: DB/архитектурын bottleneck, кэш, тохиргоо."
@@ -396,7 +396,6 @@
       keys:["Duration","ABC","Time","Cost","Bottleneck"],
       short:"Duration analysis нь хамгийн удаан (bottleneck) хэсгийг, activity-based costing (ABC) нь хамгийн их өртөгтэй үйл ажиллагааг олж сайжруулалт хийхэд ашиглагдана.",
       book:"Duration analysis нь bottleneck илрүүлнэ; ABC нь өртөг ихтэй үйл ажиллагааг илрүүлж зардлыг бууруулах шийдэл гаргахад тусалдаг.",
-      bookHint:"Уншаад хэлэх: “Нэг нь цаг, нөгөө нь өртөг.”",
       ex:[
         "Duration: төлбөр баталгаажих удаан → webhook сайжруулах.",
         "ABC: support ticket өртөг өндөр → self-service."
@@ -413,7 +412,6 @@
       keys:["BPR","As-is depth","Constraints","Innovation","Risk"],
       short:"BPR дээр as-is-ийг хангалттай судалбал хэрэгжүүлэхэд тулгарах бодит хязгаарлалт/эрсдэлийг олно, гэхдээ хэт их “хуучин” дээр гацвал шинэ to-be дизайныг сааруулж болдог тул баланс хэрэгтэй.",
       book:"BPR нь эрс өөрчлөлт тул шинэ төлөвийг төсөөлөх нь чухал; гэвч as-is-ийн бодит хязгаарлалтыг мэдэхгүй бол хэрэгжүүлэх эрсдэл өснө, тиймээс ‘хангалттай’ судалгаа ашигтай.",
-      bookHint:"Уншаад хэлэх: “Хэт бага=эрсдэл, хэт их=хуучин сэтгэлгээ.”",
       ex:[
         "eSIM: операторын API/хууль зэрэг as-is хязгаарлалтыг мэдэх хэрэгтэй.",
         "Гэхдээ бүх хуучны алхмыг хуулбарлахгүй — шинэ процесс зохионо."
@@ -429,7 +427,6 @@
       keys:["Value","Cost","Breadth","Risk","Strategy"],
       short:"Шинжилгээний стратеги сонголт нь potential business value, project cost, breadth, risk гэсэн 4 хүчин зүйлсийн тэнцвэр дээр үндэслэнэ.",
       book:"Стратеги сонголт нь ашиг-өртөг-эрсдэл ба хамрах хүрээг тэнцвэржүүлэх асуудал; өндөр эрсдэлтэй, өргөн хүрээтэй төсөлд илүү нягт шинжилгээ шаардлагатай.",
-      bookHint:"Уншаад хэлэх: “Value–Cost–Breadth–Risk.”",
       ex:[
         "Value өндөр, risk өндөр бол: илүү гүн analysis + JAD + олон тест.",
         "Value бага бол: богино analysis, хурдан шийдвэр."
@@ -445,7 +442,6 @@
       keys:["Interview steps","Select","Questions","Conduct","Follow-up"],
       short:"Interview нь зөв хүмүүсийг сонгох → зөв асуулт боловсруулах → бэлтгэх → ярилцлага хийх → follow-up хийж баталгаажуулах 5 алхмаар явагддаг.",
       book:"Ярилцлага нь мэдээлэл цуглуулах түгээмэл арга бөгөөд амжилт нь зөв хүмүүс сонгох, сайн асуулт бэлтгэх, дараа нь тайлан/баталгаажуулалт хийхээс хамаарна.",
-      bookHint:"Уншаад хэлэх: “Select → Design → Prepare → Conduct → Follow-up.”",
       ex:[
         "Support, Sales, Admin талуудтай ярилцана.",
         "Тэмдэглэлээ баталгаажуулж requirements болгоно."
@@ -463,7 +459,6 @@
       keys:["Closed-ended","Open-ended","Probing","When to use"],
       short:"Closed-ended нь богино хэмжигдэхүйц хариу авахад, open-ended нь дэлгэрэнгүй ойлголт авахад, probing нь тодорхойгүй/дутуу хариуг гүнзгийрүүлэн баталгаажуулахад ашиглагдана.",
       book:"Асуултын төрөл нь авах мэдээллээс хамаарна: тоон/тод мэдээлэл → хаалттай, ойлголт нээх → нээлттэй, тодруулах → probing.",
-      bookHint:"Уншаад хэлэх: “Closed=quick, Open=insight, Probing=clarify.”",
       ex:[
         "Closed: ‘Өдөрт хэдэн захиалга?’",
         "Open: ‘Яагаад хэрэглэгчид гацдаг вэ?’",
@@ -481,7 +476,6 @@
       keys:["Unstructured","Structured","Exploration","Standardization"],
       short:"Unstructured interview нь шинэ домэйн/асуудлыг нээхэд (exploration) тохиромжтой, structured interview нь олон оролцогчоос нэг стандарт асуултаар харьцуулж хэмжихэд тохиромжтой.",
       book:"Чөлөөт ярилцлага нь домэйн ойлголт авахад, бүтцтэй ярилцлага нь стандартчилсан өгөгдөл цуглуулахад үр дүнтэй.",
-      bookHint:"Уншаад хэлэх: “Explore vs Standardize.”",
       ex:[
         "Эхэнд нь чөлөөт ярилцлага хийж асуудал нээнэ.",
         "Дараа нь structured-ээр баталгаажуулна."
@@ -498,7 +492,6 @@
       keys:["Top-down","Bottom-up","Big picture","Details"],
       short:"Top-down ярилцлага нь зорилго/ерөнхий процессыг хурдан тодруулдаг бол bottom-up нь бодит алхам, дүрэм, exception-ийг гаргаж ирдэг тул хоёрыг хослуулбал хамгийн зөв.",
       book:"Top-down нь стратеги/зорилгыг тодруулдаг; bottom-up нь бодит алхам, exception-ийг илрүүлдэг.",
-      bookHint:"Уншаад хэлэх: “Goals → Details, эсвэл Steps → Picture.”",
       ex:[
         "Top-down: ‘Системийн гол зорилго?’",
         "Bottom-up: ‘Checkout яг ямар алхмаар явдаг вэ?’"
@@ -515,7 +508,6 @@
       keys:["Participants","Stakeholders","JAD","Management support"],
       short:"Interview-д хэрэглэгч/менежер/IT гэх мэт stakeholders-ийг тус тус сонгож ярилцдаг бол JAD-д шийдвэр гаргах эрхтэй, мэдлэгтэй хүмүүсийг нэг дор цуглуулж хурдан тохиролцоо гаргана.",
       book:"Зөв оролцогч сонголт нь мэдээллийн чанарт шууд нөлөөлнө: interview нь depth, JAD нь alignment гаргах зорилготой.",
-      bookHint:"Уншаад хэлэх: “Interview=depth, JAD=alignment.”",
       ex:[
         "Support (pain), Sales (value), Admin (ops), Dev (constraints) багтана."
       ]
@@ -531,7 +523,6 @@
       keys:["Facts","Opinions","Priorities","Evidence"],
       short:"Facts нь ‘юу болж байна?’ гэдгийг нотолж өгдөг бол opinions нь ‘юу нь хамгийн чухал/яагаад?’ гэдгийг тодруулдаг тул зөв шийдвэр гаргахын тулд хоёулаа хэрэгтэй.",
       book:"Баримт ба санал бодол нь өөр төрлийн мэдээлэл: баримт нь бодит байдлыг, санал бодол нь ач холбогдол/приоритетыг илэрхийлдэг.",
-      bookHint:"Уншаад хэлэх: “Facts=what, Opinions=so what.”",
       ex:[
         "Fact: ‘Өдөрт 200 захиалга.’",
         "Opinion: ‘Төлбөр дээр хамгийн их гацдаг.’"
@@ -547,7 +538,6 @@
       keys:["JAD steps","Workshop","Agenda","Consensus","Report"],
       short:"JAD session нь оролцогч сонгох → бэлтгэх (agenda/material) → session явуулах → шийдвэр/шаардлагаа баримтжуулах → follow-up report-оор баталгаажуулах 5 алхамтай.",
       book:"JAD нь бүлгийн workshop хэлбэрээр шаардлагыг хурдан нэгтгэдэг; амжилтын үндэс нь сайн бэлтгэл, сайн хөтлөлт, сайн баримтжуулалт.",
-      bookHint:"Уншаад хэлэх: “Prepare сайн бол JAD амжилттай.”",
       ex:[
         "Payment flow, QR delivery, security зэрэг асуудлыг нэг дор тохиролцоно."
       ]
@@ -563,7 +553,6 @@
       keys:["Facilitator","Scribe","Moderation","Documentation"],
       short:"Facilitator нь хэлэлцүүлгийг зөв чиглүүлж удирддаг, харин scribe нь ярилцсан шийдвэр ба шаардлагыг алдахгүйгээр бичиж баримтжуулдаг.",
       book:"JAD-д роль чухал: нэг нь процесс удирдана, нөгөө нь баримтжуулна.",
-      bookHint:"Уншаад хэлэх: “Хөтлөгч удирдана, бичээч тэмдэглэнэ.”",
       ex:[
         "Facilitator: topic-оо барина; Scribe: requirements-ийг дугаарлаж бичнэ."
       ]
@@ -580,7 +569,6 @@
       keys:["Process","Content","Group dynamics","Timeboxing"],
       short:"Facilitator нь (1) явцыг/цагаа барих (process), (2) сэдвийг зөв чиглүүлэх (content), (3) багийн харилцааг зохицуулах (group dynamics) гэсэн 3 үндсэн ажлыг хийдэг.",
       book:"Facilitator нь цаг барих, зөв сэдэв дээр тогтоох, бүх талын оролцоог хангах үүрэгтэй.",
-      bookHint:"Уншаад хэлэх: “Process–Content–People.”",
       ex:[
         "Timeboxing хийж сунжруулахгүй; бүх хүнээс санал авна."
       ]
@@ -596,7 +584,6 @@
       keys:["e-JAD","Online","Collaboration","Distributed teams"],
       short:"e-JAD нь JAD-ыг онлайн орчинд явуулах хэлбэр бөгөөд байгууллагад зайнаас олон stakeholder оролцуулах, цаг/зардал хэмнэх, баримтжуулалтыг хурдан хийх давуу тал өгдөг.",
       book:"e-JAD нь зайнаас хамтран шаардлага тодорхойлох боломж олгодог; цаг/зардал бууруулах, оролцоог өргөжүүлэхэд ашигтай.",
-      bookHint:"Уншаад хэлэх: “Online JAD = хурдан + өргөн оролцоо.”",
       ex:[
         "Meet + shared doc ашиглаад realtime requirements бичнэ."
       ]
@@ -612,7 +599,6 @@
       keys:["Questionnaire","Clarity","No follow-up","Closed-ended"],
       short:"Questionnaire-д тодруулах follow-up боломж бага тул асуултыг маш тодорхой (self-explanatory) бичдэг; харин interview/JAD дээр асуултаа явцад нь тайлбарлаж гүнзгийрүүлэх боломжтой.",
       book:"Асуулга нь өөрөө тайлбарлагдахуйц байх ёстой; ярилцлага/JAD дээр тодруулах асуулт асууж болдог.",
-      bookHint:"Уншаад хэлэх: “Survey дээр буруу бичвэл засах боломжгүй.”",
       ex:[
         "Survey: ‘Ойлгомжтой юу? 1–5’",
         "Interview: ‘Яагаад ойлгомжгүй байсан бэ?’"
@@ -629,7 +615,6 @@
       keys:["Response rate","Reminders","Incentives","Deadline"],
       short:"Асуулгын хариу өгөх хувь нь ихэвчлэн дунджаар бага байдаг тул богино, ойлгомжтой асуулга + сануулга (reminder) + жижиг урамшуулал (incentive) + тодорхой хугацаа (deadline) нь response rate-ийг нэмэгдүүлдэг.",
       book:"Response rate нь сувгаас хамаарч өөр; нэмэхийн тулд богино/ойлгомжтой асуулга, хугацаа, сануулга, урамшуулал ашигладаг.",
-      bookHint:"Уншаад хэлэх: “Short + reminder хамгийн үр дүнтэй.”",
       ex:[
         "2 удаа reminder явуулах; 1–2 минут бөглөхөөр богино болгох."
       ]
@@ -645,7 +630,6 @@
       keys:["Document analysis","Policies","Forms","Reports","Manuals"],
       short:"Document analysis нь байгууллагын баримт бичгүүд (policy/form/report/manual)-ээс нотолгоонд суурилсан мэдээлэл цуглуулж, албан ёсны процесс ба дүрмийг тодруулах арга юм.",
       book:"Document analysis нь одоогийн системийн албан ёсны баримт бичгүүдээр процесс, өгөгдөл, дүрмийг тодруулдаг; бусад аргуудтай хослуулахад сайн.",
-      bookHint:"Уншаад хэлэх: “Баримтаас fact авна.”",
       ex:[
         "RFP, журам, form, тайлан, зааврыг шалгаж requirements баталгаажуулна."
       ]
@@ -661,7 +645,6 @@
       keys:["Formal","Informal","Reality gap","Documentation"],
       short:"Formal system нь баримт/журам дээрх ‘ёстой’ процесс, informal system нь бодит ажил дээрх ‘үнэндээ’ процесс бөгөөд document analysis нь formal-г тодруулж, бусад аргуудтай хамт informal-тэй зөрүү (gap)-г илрүүлэхэд тусалдаг.",
       book:"Баримтууд formal системийг сайн харуулдаг; informal-ийг илрүүлэхэд ярилцлага/ажиглалт хэрэгтэй бөгөөд зөрүү нь сайжруулалтын боломж болдог.",
-      bookHint:"Уншаад хэлэх: “Paper vs Reality.”",
       ex:[
         "Formal: 24 цагт QR илгээнэ; Informal: 2–3 өдөр хойшлох."
       ]
@@ -677,7 +660,6 @@
       keys:["Observation","Workflow","Informal","Reality","Observer effect"],
       short:"Observation нь хүмүүсийн бодит ажлын урсгалыг шууд ажиглаж, informal алхам/shortcut болон бодит bottleneck-ийг илрүүлэх давуу талтай (гэхдээ ажиглагдаж буй хүн зангаа өөрчилж магадгүй).",
       book:"Observation нь ‘хийж байгааг’ харах арга тул бодит урсгал, гацалт, алдаа гардаг цэгийг илүү сайн илрүүлдэг; observer effect байж болно.",
-      bookHint:"Уншаад хэлэх: “Яриа биш — бодит үйлдлийг харна.”",
       ex:[
         "Support хүн QR явуулахдаа хаана copy/paste хийдгийг ажиглах."
       ]
@@ -693,7 +675,6 @@
       keys:["Type","Depth","Breadth","Cost","Integration"],
       short:"Мэдээлэл цуглуулах арга сонголт нь авах мэдээллийн төрөл (facts/opinions), шаардлагатай depth vs breadth, зардал/цаг, хэрэглэгчийн оролцоо, мөн аргуудыг хослуулах боломж (integration)-оос хамаарна.",
       book:"Арга сонгох нь мэдээллийн төрөл, гүн/өргөн, төсөв, хэрэглэгчийн оролцоо зэргээс хамаарна; аргуудыг хослуулах нь илүү найдвартай.",
-      bookHint:"Уншаад хэлэх: “Goal → Method.”",
       ex:[
         "Breadth хэрэгтэй бол survey; depth хэрэгтэй бол interview/observation."
       ]
@@ -709,7 +690,6 @@
       keys:["Concept map","Relationships","Visualization","Big picture"],
       short:"Concept map нь текстэн жагсаалтаас илүүгээр шаардлагуудын холбоо (relationships)-г нэг зураг дээр үзүүлдэг тул баг хурдан ойлголцож, давхардал/алгассан холбоог амархан илрүүлдэг.",
       book:"Concept map нь шаардлагуудын сүлжээ холбоог харуулдаг тул ойлголцол хурдан, алдаа илрүүлэхэд хялбар.",
-      bookHint:"Уншаад хэлэх: “Visual = fast alignment.”",
       ex:[
         "Payment ↔ Order ↔ Invoice ↔ Notification холбоог зураглана."
       ]
@@ -725,7 +705,6 @@
       keys:["Story cards","Task list","Agile","Portable","Easy updates"],
       short:"Story cards нь шаардлагыг жижиг нэгж болгон уян хатан удирдах боломж өгдөг бол task lists нь тэр шаардлагыг хэрэгжүүлэх ажлуудыг тодорхой болгож, хуваарилалт ба явцын хяналтыг хялбар болгодог.",
       book:"Story card нь шаардлагыг карт хэлбэрээр дүрслэж багийн ажлыг хурдан болгодог; task list нь бодит ажлуудыг тодорхойлж төлөвлөлт/туршилтыг дэмждэг.",
-      bookHint:"Уншаад хэлэх: “Story=what, Task=how.”",
       ex:[
         "Story: ‘User QR авах’ → Tasks: webhook, QR render, email send, test."
       ]
@@ -741,7 +720,6 @@
       keys:["System proposal","Executive summary","Feasibility","Workplan","Models"],
       short:"System proposal нь planning+analysis үеийн гол материалууд болох executive summary, system request, workplan, feasibility, requirements, models-ийг нэгтгэсэн шийдвэрийн баримт юм.",
       book:"System proposal нь planning+analysis үеийн материалуудыг нэг документ болгон нэгтгэж, удирдлага/стейкхолдерт шийдвэр гаргахад ашигладаг.",
-      bookHint:"Уншаад хэлэх: “Proposal = decision document.”",
       ex:[
         "eSIM proposal: хүрээ, шаардлага, диаграм, хугацаа/зардал, эрсдэл."
       ]
@@ -757,7 +735,6 @@
       keys:["Executive summary","Decision support","High-level","Approve/revise/reject"],
       short:"Executive summary нь удирдлагад зориулж proposal-ын гол зорилго, ашиг, өртөг, эрсдэл, санал болгож буй шийдлийг хамгийн товч өндөр түвшинд өгч шийдвэр гаргалтыг дэмждэг.",
       book:"Executive summary нь proposal-ын хамгийн их уншигддаг хэсэг бөгөөд шийдвэр гаргалтыг дэмжихийн тулд гол мэдээллийг товч өгдөг.",
-      bookHint:"Уншаад хэлэх: “Busy manager-д зориулсан 1-page санаа.”",
       ex:[
         "eSIM: ‘онлайн төлбөр + автомат QR’ → хугацаа/зардал буурна."
       ]
@@ -826,7 +803,6 @@
     book.className = "bookNote";
     book.innerHTML = `
       <p><b>Номоос (summary):</b> ${item.book}</p>
-      <p class="small">💡 ${item.bookHint || ""}</p>
     `;
     details.appendChild(book);
 

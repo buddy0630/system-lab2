@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="mn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Лаб 2 — Part 2 | Web</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#0f1a30;
+      --card:#0f203b;
+      --text:#e8eefc;
+      --muted:#a9b7d6;
+      --accent:#6aa6ff;
+      --line:rgba(255,255,255,.10);
+      --chip:rgba(106,166,255,.14);
+      --quote:rgba(46,229,157,.10);
+      --quoteLine:rgba(46,229,157,.35);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue";
+      background: radial-gradient(1000px 600px at 20% 0%, rgba(106,166,255,.15), transparent 55%),
+                  radial-gradient(800px 500px at 90% 20%, rgba(38,208,124,.10), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+    header{
+      padding:18px;
+      border-bottom:1px solid var(--line);
+      background: rgba(15,26,48,.65);
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(10px);
+      z-index: 10;
+    }
+    .wrap{max-width:1100px;margin:0 auto}
+    .top{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap}
+    .leftTop{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    .badge{
+      padding:6px 10px;
+      background: rgba(106,166,255,.18);
+      border:1px solid rgba(106,166,255,.35);
+      border-radius:999px;
+      font-size:12px;
+      color:var(--text);
+      font-weight:700;
+    }
+    .routeBtn{
+      text-decoration:none;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 8px 11px;
+      border-radius: 12px;
+      font-weight:700;
+      font-size:12px;
+      display:inline-block;
+    }
+    .routeBtn:hover{border-color: rgba(106,166,255,.45); background: rgba(106,166,255,.12)}
+    h1{margin:10px 0 0;font-size:18px; line-height:1.3}
+    .sub{margin:6px 0 0; color:var(--muted); font-size:13px; line-height:1.6}
+
+    main{padding:18px}
+    .grid{display:grid; grid-template-columns:300px 1fr; gap:16px; align-items:start}
+    @media (max-width: 900px){
+      .grid{grid-template-columns:1fr}
+      .side{position:static}
+      .row{grid-template-columns:1fr}
+    }
+    .side{
+      position: sticky;
+      top: 106px;
+      padding:14px;
+      background: rgba(15,26,48,.55);
+      border:1px solid var(--line);
+      border-radius:14px;
+    }
+    .side h3{margin:0 0 10px;font-size:14px}
+    .toc{max-height: 70vh; overflow:auto; padding-right:6px}
+    .toc a{
+      display:block;
+      padding:7px 10px;
+      border-radius:10px;
+      color: var(--muted);
+      font-size:13px;
+      border:1px solid transparent;
+      margin-bottom:6px;
+      text-decoration:none;
+    }
+    .toc a:hover{background: rgba(106,166,255,.10); border-color: rgba(106,166,255,.20); color: var(--text)}
+    .hint{margin-top:10px; font-size:12px; color: var(--muted); line-height:1.6; border-top:1px dashed var(--line); padding-top:10px}
+
+    .content{display:flex; flex-direction:column; gap:12px}
+    .card{background: rgba(15,32,59,.62); border:1px solid var(--line); border-radius:16px; padding:14px; scroll-margin-top:110px}
+    .card h2{margin:0 0 10px; font-size:15px; display:flex; gap:10px; align-items:center}
+    .qnum{
+      width:28px; height:28px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center;
+      background: rgba(106,166,255,.16); border:1px solid rgba(106,166,255,.30); color:var(--text); font-weight:800; font-size:13px; flex:0 0 auto;
+    }
+    .row{display:grid; grid-template-columns:1.1fr .9fr; gap:10px; align-items:start}
+    .block{background: rgba(255,255,255,.03); border:1px solid var(--line); border-radius:14px; padding:12px}
+    .label{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color: var(--muted); margin:0 0 8px}
+    ul{margin:0; padding-left:18px; color:var(--text)}
+    li{margin:6px 0; color:var(--text)}
+    .chips{display:flex; gap:8px; flex-wrap:wrap}
+    .chip{font-size:12px; color:var(--text); padding:6px 10px; border-radius:999px; background:var(--chip); border:1px solid rgba(106,166,255,.25); white-space:nowrap}
+
+    .briefAnswer{margin-top:10px; background: rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.10); border-radius:14px; padding:10px 12px; color: var(--text); line-height:1.65; font-size:13px}
+    .briefAnswer b{color: var(--accent)}
+
+    details{margin-top:10px; background: rgba(255,255,255,.02); border:1px dashed rgba(255,255,255,.14); border-radius:14px; padding:10px 12px}
+    summary{cursor:pointer; color:var(--accent); font-weight:800; outline:none}
+
+    .bookNote{background: var(--quote); border:1px solid var(--quoteLine); border-left:4px solid rgba(46,229,157,.85); border-radius:14px; padding:12px; margin-top:10px; margin-bottom:10px}
+    .bookNote p{margin:0; color:var(--text); line-height:1.65; font-size:13px}
+    .bookNote .small{margin-top:6px; color:var(--muted); font-size:12px}
+
+    .ex{color:var(--muted); line-height:1.7; font-size:13px; background: rgba(0,0,0,.12); border:1px solid rgba(255,255,255,.10); border-radius:14px; padding:10px 12px}
+    .ex b{color:var(--text)}
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="wrap">
+    <div class="top">
+      <div class="leftTop">
+        <span class="badge">Лаб 2</span>
+        <span class="badge">Part 2</span>
+        <span class="badge">eSIM</span>
+      </div>
+      <a class="routeBtn" href="index.html">← Back to Chapter 3</a>
+    </div>
+    <h1>Part 2 — Лаб 2: Жишээ систем (eSIM худалдаа)</h1>
+    <p class="sub">SDLC шаардлага + Use-case тест + RFP ↔ Requirements нийцүүлэлт</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="grid">
+    <aside class="side">
+      <h3>📌 TOC (Part 2)</h3>
+      <div class="toc">
+        <a href="#part2">2 Part 2</a>
+        <a href="#p2-summary">2.1 Executive Summary</a>
+        <a href="#p2-problem">2.2 Problem & Goals</a>
+        <a href="#p2-actors">2.3 Stakeholders & Actors</a>
+        <a href="#p2-rfp">2.4 RFP Summary</a>
+        <a href="#p2-req">2.5 Requirements (FR/NFR)</a>
+        <a href="#p2-usecase">2.6 Use-Case Diagram</a>
+        <a href="#p2-tests">2.7 Use-Case Testing</a>
+        <a href="#p2-plan">2.8 Implementation Plan</a>
+        <a href="#p2-trace">2.9 Traceability</a>
+        <a href="#p2-close">2.10 Дүгнэлт</a>
+      </div>
+      <div class="hint">Зурагнуудыг энэ файлтай адил folder-т байрлуул: usecase.png, gantt.png</div>
+    </aside>
+
+    <section class="content" id="content">
+      <section id="part2" class="card">
+        <h2><span class="qnum">2</span> Part 2 — Лаб 2: Жишээ систем (eSIM худалдаа) + SDLC шаардлага + Use-case тест</h2>
+
+        <div class="chips">
+          <span class="chip">Жишээ систем: eSIM online худалдаа</span>
+          <span class="chip">SDLC: Requirements → Use-case → Test</span>
+          <span class="chip">RFP ↔ Requirements нийцүүлэлт</span>
+        </div>
+
+        <div class="briefAnswer">
+          <b>Зорилго:</b> RFP дээр үндэслэн шаардлага тодорхойлж (FR/NFR), use-case diagram гарган,
+          гол урсгалуудыг test case-ээр туршиж шалгасан байдлаар тайлбарлах.
+        </div>
+      </section>
+
+      <!-- 2.1 -->
+      <section id="p2-summary" class="card">
+        <h2><span class="qnum">2.1</span> Executive Summary</h2>
+
+        <div class="row">
+          <div class="block">
+            <p class="label">Товч танилцуулга</p>
+            <ul>
+              <li>Хэрэглэгч eSIM багц хайж сонгоно → захиалга үүсгэнэ → төлбөр төлнө → төлбөр баталгаажна → eSIM activation/QR авна.</li>
+              <li>Системийн зорилго: худалдан авалтын алхмыг хурдан, ойлгомжтой, найдвартай болгох.</li>
+              <li>Интеграц: Payment Gateway + eSIM Provider API + Email Service.</li>
+            </ul>
+
+            <div class="bookNote">
+              <p><b>Яагаад хэрэгтэй вэ?</b> Гар ажиллагааг багасгаж, төлбөр/идэвхжүүлэлтийн мэдээлэл алдагдах эрсдэлийг бууруулна.</p>
+              <p class="small">Deliverables: Requirements (FR/NFR), Use-case diagram, Test cases, Traceability</p>
+            </div>
+          </div>
+
+          <div class="block">
+            <p class="label">Scope (хүрээ)</p>
+            <ul>
+              <li><b>Орох:</b> Plan browse, order create, payment, verify, activation fetch, email send, usage check.</li>
+              <li><b>Орохгүй (if needed):</b> Refund, loyalty, full CRM (энэ лабораторид заавал биш).</li>
+            </ul>
+            <details>
+              <summary>Нэмэлт тэмдэглэл</summary>
+              <div class="ex">
+                Scope-оос гаргасан функцуудыг багш асуувал “Lab хүрээнд үндсэн урсгал дээр төвлөрсөн” гэж тайлбарлана.
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2.2 -->
+      <section id="p2-problem" class="card">
+        <h2><span class="qnum">2.2</span> Problem & Goals</h2>
+
+        <div class="row">
+          <div class="block">
+            <p class="label">Асуудал</p>
+            <ul>
+              <li>eSIM авах явц олон алхамтай, зарим үед гар ажиллагаатай → удаан.</li>
+              <li>Төлбөр амжилтгүй/саатсан үед хэрэглэгч status-аа ойлгохгүй.</li>
+              <li>Activation/QR мэдээлэл буруу дамжих, алдагдах эрсдэлтэй.</li>
+            </ul>
+          </div>
+
+          <div class="block">
+            <p class="label">Зорилго</p>
+            <ul>
+              <li>Алхамуудыг цэгцлэх: Plan → Order → Payment → Activation.</li>
+              <li>Payment баталгаажуулалтыг найдвартай болгох (verify/webhook).</li>
+              <li>Activation мэдээллийг автоматаар авч хэрэглэгчид хүргэх (email + page).</li>
+              <li>Админ удирдлага: plans/orders.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="briefAnswer">
+          <b>Амжилтын шалгуур:</b> төлбөр баталгаажсаны дараа хэрэглэгч activation-аа шууд авдаг, алдаа гарсан ч систем crash хийхгүй, тод мессеж гаргана.
+        </div>
+      </section>
+
+      <!-- 2.3 -->
+      <section id="p2-actors" class="card">
+        <h2><span class="qnum">2.3</span> Stakeholders & Actors</h2>
+
+        <div class="block">
+          <p class="label">Actor list</p>
+          <div class="ex">
+            <b>Хэрэглэгч:</b> plan хайх/үзэх, захиалга үүсгэх, төлбөр хийх, QR/activation авах, usage шалгах<br/>
+            <b>Админ:</b> plan удирдах, захиалга хянах/удирдах<br/>
+            <b>Payment Gateway:</b> төлбөрийн invoice + verify/webhook<br/>
+            <b>eSIM Provider API:</b> activation (QR) мэдээлэл өгөх<br/>
+            <b>Email Service:</b> activation мэдээллийг имэйлээр илгээх
+          </div>
+        </div>
+
+        <details>
+          <summary>Акторын харилцаа</summary>
+          <div class="ex">
+            Хэрэглэгч төлбөр төлөх үед gateway-тай харилцана. Төлбөр баталгаажмагц provider API-аас QR авч,
+            email service-р дамжуулан хэрэглэгчид илгээнэ.
+          </div>
+        </details>
+      </section>
+
+      <!-- 2.4 -->
+      <section id="p2-rfp" class="card">
+        <h2><span class="qnum">2.4</span> RFP Summary (Захиалагчийн хүсэлт)</h2>
+
+        <div class="block">
+          <p class="label">RFP-ийн гол шаардлага (товч)</p>
+          <ul>
+            <li>Хэрэглэгч eSIM багцыг онлайнаар сонгон худалдан авах.</li>
+            <li>Payment gateway ашиглан төлбөр хийх ба төлбөрийн статус баталгаажуулах.</li>
+            <li>Төлбөр баталгаажсаны дараа eSIM activation/QR мэдээллийг хэрэглэгчид хүргэх.</li>
+            <li>Админ талд багц болон захиалгыг удирдах.</li>
+          </ul>
+        </div>
+
+        <div class="briefAnswer">
+          <b>Нийцүүлэлт:</b> Доорх FR/NFR болон use-case/test case-үүд нь дээрх RFP-ийн мөр бүрийг хангана.
+        </div>
+      </section>
+
+      <!-- 2.5 -->
+      <section id="p2-req" class="card">
+        <h2><span class="qnum">2.5</span> Requirements (FR / NFR)</h2>
+
+        <div class="row">
+          <div class="block">
+            <p class="label">Functional requirements</p>
+            <ul>
+              <li><b>FR1</b> — Plan хайх/үзэх</li>
+              <li><b>FR2</b> — Plan дэлгэрэнгүй харах</li>
+              <li><b>FR3</b> — Захиалга үүсгэх (Create order)</li>
+              <li><b>FR4</b> — Төлбөр хийх (Make payment)</li>
+              <li><b>FR5</b> — Төлбөр баталгаажуулах (Verify payment)</li>
+              <li><b>FR6</b> — eSIM activation (QR) авах (Provider API)</li>
+              <li><b>FR7</b> — Имэйл илгээх (Send activation email)</li>
+              <li><b>FR8</b> — Usage шалгах</li>
+              <li><b>FR9</b> — Admin: Manage plans / Manage orders</li>
+            </ul>
+          </div>
+
+          <div class="block">
+            <p class="label">Non-functional requirements</p>
+            <ul>
+              <li><b>NFR1</b> — Аюулгүй байдал: webhook/verify request validation (signature/token)</li>
+              <li><b>NFR2</b> — Гүйцэтгэл: invoice/QR хурдан харагдах</li>
+              <li><b>NFR3</b> — Найдвартай ажиллагаа: retry + error handling</li>
+              <li><b>NFR4</b> — Ашиглахад хялбар: алхамууд ойлгомжтой UX</li>
+            </ul>
+          </div>
+        </div>
+
+        <details>
+          <summary>Acceptance criteria (товч)</summary>
+          <div class="ex">
+            Жишээ: FR4/FR5 — Хэрэглэгч төлбөр төлсний дараа order статус PAID болж, activation харагдаж, имэйл ирнэ.
+          </div>
+        </details>
+      </section>
+
+      <!-- 2.6 -->
+      <section id="p2-usecase" class="card">
+        <h2><span class="qnum">2.6</span> Use-Case Diagram</h2>
+
+        <div class="block">
+          <p class="label">Use-case зураг</p>
+          <div class="ex">
+            Доорх зураг нь хэрэглэгч, админ, payment gateway, provider API, email service-ийн хоорондох харилцааг харуулна.
+          </div>
+
+          <div style="margin-top:12px; border:1px solid var(--line); border-radius:14px; overflow:hidden; background: rgba(0,0,0,.12);">
+            <img src="usecase.png" alt="Use-Case Diagram" style="width:100%; height:auto; display:block;">
+          </div>
+
+          <div class="hint">
+            Хэрэв зураг харагдахгүй байвал <b>usecase.png</b>-г энэ HTML файлтай нэг folder-т тавь.
+          </div>
+        </div>
+
+        <div class="briefAnswer">
+          <b>Include тайлбар:</b> “Төлбөр хийх” use-case нь “Төлбөр баталгаажуулах”-ыг include хийж, баталгаажсаны дараа “eSIM activation авах” болон “Email илгээх” рүү шилжинэ.
+        </div>
+      </section>
+
+      <!-- 2.7 -->
+      <section id="p2-tests" class="card">
+        <h2><span class="qnum">2.7</span> Use-Case Testing (Test Cases)</h2>
+
+        <div class="block">
+          <p class="label">Test cases (богино, лабораторид хангалттай)</p>
+
+          <div class="ex">
+            <b>TC1 — Амжилттай төлбөр</b><br/>
+            Алхам: Plan сонгох → Order үүсгэх → QR гаргах → Төлбөр төлөх → Verify/ webhook → Provider API → Email<br/>
+            <b>Expected:</b> Order = PAID, activation/QR харагдана, имэйл явна.
+          </div>
+
+          <div class="ex" style="margin-top:10px;">
+            <b>TC2 — Төлбөр амжилтгүй</b><br/>
+            Алхам: QR гаргах → Төлбөр амжилтгүй/цуцлах → Verify хийх<br/>
+            <b>Expected:</b> Order PAID болохгүй, хэрэглэгчид retry/өөр төлбөрийн арга санал болгоно.
+          </div>
+
+          <div class="ex" style="margin-top:10px;">
+            <b>TC3 — Provider API timeout</b><br/>
+            Алхам: Order PAID → Provider API дуудлага timeout<br/>
+            <b>Expected:</b> Retry хийнэ; амжилтгүй хэвээр бол “түр хүлээнэ үү” мессеж + activation pending.
+          </div>
+
+          <div class="ex" style="margin-top:10px;">
+            <b>TC4 — Email илгээхэд алдаа</b><br/>
+            Алхам: Activation авна → Email service алдаа буцаана<br/>
+            <b>Expected:</b> Сайт дээр activation харагдана; дахин илгээх боломжтой.
+          </div>
+
+          <div class="ex" style="margin-top:10px;">
+            <b>TC5 — Usage шалгах буруу код</b><br/>
+            Алхам: Буруу код оруулах<br/>
+            <b>Expected:</b> “Олдсонгүй/алдаа” гэсэн ойлгомжтой хариу.
+          </div>
+        </div>
+
+        <div class="briefAnswer">
+          <b>Яагаад тест хэрэгтэй вэ?</b> Use-case дээр тодорхойлсон урсгал бодит нөхцөлд зөв ажиллаж буйг нотолно.
+        </div>
+      </section>
+
+      <!-- 2.8 -->
+      <section id="p2-plan" class="card">
+        <h2><span class="qnum">2.8</span> Implementation Plan (Gantt Chart)</h2>
+
+        <div class="block">
+          <p class="label">Gantt зураг</p>
+          <div class="ex">
+            Төлөвлөлтөөр: requirements → wireframe/UI → frontend → integrations/backend → testing/performance гэсэн дараалалтай.
+          </div>
+
+          <div style="margin-top:12px; border:1px solid var(--line); border-radius:14px; overflow:hidden; background: rgba(0,0,0,.12);">
+            <img src="gantt.png" alt="Gantt Chart" style="width:100%; height:auto; display:block;">
+          </div>
+
+          <div class="hint">
+            Хэрэв зураг харагдахгүй байвал <b>gantt.png</b>-г энэ HTML файлтай нэг folder-т тавь.
+          </div>
+        </div>
+
+        <details>
+          <summary>SDLC хүрээнд тайлбар (товч)</summary>
+          <div class="ex">
+            Лаб 2 дээр гол нь “analysis deliverables” буюу шаардлага, use-case, тест, RFP нийцүүлэлтээ харуулахад хангалттай.
+          </div>
+        </details>
+      </section>
+
+      <!-- 2.9 -->
+      <section id="p2-trace" class="card">
+        <h2><span class="qnum">2.9</span> Traceability (RFP ↔ Requirements ↔ Use-case ↔ Test)</h2>
+
+        <div class="block">
+          <p class="label">Traceability table (товч)</p>
+
+          <div style="overflow:auto; border:1px solid var(--line); border-radius:14px;">
+            <table style="width:100%; border-collapse:collapse; min-width:760px;">
+              <thead>
+                <tr style="background: rgba(255,255,255,.06);">
+                  <th style="text-align:left; padding:10px; border-bottom:1px solid var(--line);">RFP</th>
+                  <th style="text-align:left; padding:10px; border-bottom:1px solid var(--line);">Requirement</th>
+                  <th style="text-align:left; padding:10px; border-bottom:1px solid var(--line);">Use-case</th>
+                  <th style="text-align:left; padding:10px; border-bottom:1px solid var(--line);">Test</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding:10px; border-bottom:1px solid var(--line);">Онлайнаар plan сонгох</td>
+                  <td style="padding:10px; border-bottom:1px solid var(--line);">FR1, FR2</td>
+                  <td style="padding:10px; border-bottom:1px solid var(--line);">UC1, UC2</td>
+                  <td style="padding:10px; border-bottom:1px solid var(--line);">TC1</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px; border-bottom:1px solid var(--line);">Order үүсгэх</td>
+                  <td style="padding:10px; border-bottom:1px solid var(--line);">FR3</td>
+                  <td style="padding:10px; border-bottom:1px solid var(--line);">UC3</td>
+                  <td style="padding:10px; border-bottom:1px solid var(--line);">TC1</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px; border-bottom:1px solid var(--line);">Төлбөр + баталгаажуулалт</td>
+                  <td style="padding:10px; border-bottom:1px solid var(--line);">FR4, FR5, NFR1</td>
+                  <td style="padding:10px; border-bottom:1px solid var(--line);">UC4, UC5</td>
+                  <td style="padding:10px; border-bottom:1px solid var(--line);">TC1, TC2</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px; border-bottom:1px solid var(--line);">Activation/QR хүргэх</td>
+                  <td style="padding:10px; border-bottom:1px solid var(--line);">FR6, FR7, NFR3</td>
+                  <td style="padding:10px; border-bottom:1px solid var(--line);">UC6, UC7</td>
+                  <td style="padding:10px; border-bottom:1px solid var(--line);">TC1, TC3, TC4</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px; border-bottom:1px solid var(--line);">Админ удирдлага</td>
+                  <td style="padding:10px; border-bottom:1px solid var(--line);">FR9</td>
+                  <td style="padding:10px; border-bottom:1px solid var(--line);">UC9</td>
+                  <td style="padding:10px; border-bottom:1px solid var(--line);">TC2</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="hint">
+            Энэ хүснэгт бол “RFP болон шаардлагыг нийцүүлсэн” гэдгийн хамгийн хурдан нотолгоо.
+          </div>
+        </div>
+      </section>
+
+      <!-- 2.10 -->
+      <section id="p2-close" class="card">
+        <h2><span class="qnum">2.10</span> Дүгнэлт</h2>
+
+        <div class="block">
+          <p class="label">Conclusion</p>
+          <ul>
+            <li>RFP-ийн шаардлагуудыг FR/NFR болгон тодорхойлж, use-case diagram-аар дүрслэв.</li>
+            <li>Гол урсгалуудыг test case-ээр шалгаж баталгаажууллаа (амжилттай төлбөр, алдааны нөхцөлүүд).</li>
+            <li>Traceability хүснэгтээр RFP ↔ Requirement ↔ Use-case ↔ Test холбоог харуулсан.</li>
+          </ul>
+        </div>
+
+        <div class="briefAnswer">
+          <b>Presenter tip:</b> Хамгийн их асуух хэсэг нь “RFP-ээ яаж баталсан бэ?” → Traceability table + TC1-ээ тайлбарлаад л болно.
+        </div>
+      </section>
+    </section>
+  </div>
+</main>
+</body>
+</html>
